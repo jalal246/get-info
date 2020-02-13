@@ -33,9 +33,10 @@ function validateAccessability(dir) {
  *
  * @param {Object} input
  * @param {string} input.dir  packages path [path="./packages/*"]
+ * @param {boolean} input.isFilter isFilter paths [isFilter=true]
  * @returns {Array} contains packages directory
  */
-function getPackagesPath({ dir = "./packages/*" } = {}) {
+function getPackagesPath({ dir = "./packages/*", isFilter = true } = {}) {
   msg(`Getting packages path in ${dir}`);
 
   let folders = [];
@@ -51,7 +52,7 @@ function getPackagesPath({ dir = "./packages/*" } = {}) {
     } else {
       error("Unable to read package form project root directory");
     }
-  } else {
+  } else if (isFilter) {
     folders = folders.filter(pkgDir => validateAccessability(pkgDir));
   }
 

@@ -26,4 +26,19 @@ describe("testing getPackagesPath()", () => {
 
     expect(packagesPath).to.deep.equal(expected);
   });
+
+  it("returns non-array Array even if there's no package.json or src folder", () => {
+    const packagesPath = getPackagesPath({
+      dir: "./test/packages-invalid/*",
+      isFilter: false
+    });
+
+    const expected = [
+      "./test/packages-invalid/folo-forms",
+      "./test/packages-invalid/folo-layout",
+      "./test/packages-invalid/folo-values"
+    ];
+
+    expect(packagesPath).to.deep.equal(expected);
+  });
 });
