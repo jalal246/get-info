@@ -4,6 +4,7 @@ const fs = require("fs");
 const { msg, success, error } = require("@mytools/print");
 
 const getPackagesPath = require("./getPackagesPath");
+const { filterPathAccessability } = require("./utils");
 
 /**
  * Gets package json by path. Reads each passed directory. Then, Returns
@@ -13,9 +14,10 @@ const getPackagesPath = require("./getPackagesPath");
  * something wrong in src/index.
  *
  * @param {Object} input
- * @param {Array} input.packagesPath
+ * @param {Array} input.pkgPath Array contains paths
  * @param {string} input.buildName [buildName="dist"]
  * @param {string} input.srcName [srcName="src"]
+ *  @param {boolean} input.isFilter isFilter paths [isFilter=true]
  *
  * @returns {Object[]} packInfo
  * @returns {string} packInfo[].sourcePath
@@ -26,34 +28,39 @@ const getPackagesPath = require("./getPackagesPath");
  * @returns {...*}   other
  */
 function getJsonByPath({
-  packagesPath = getPackagesPath(),
+  pkgPath,
 
   buildName = "dist",
-  srcName = "src"
+  srcName = "src",
+
+  isFilter = true
 } = {}) {
+  let packagesPath;
+  let isFiltered = isFilter;
+
+  if (!pkgPath) {
+    packagesPath = getPackagesPath();
+    isFiltered = true;
+  } else if (isFiltered) {
+    packagesPath = filterPathAccessability(pkgPath);
+  } else {
+    packagesPath = pkgPath;
+  }
+
   msg("Reading package.json and setting packagesPath paths");
 
   const packagesJson = packagesPath.map(pkg => {
     const path = resolve(pkg, "package.json");
 
     try {
-      /**
-       * check path readability
-       */
-      fs.accessSync(path, fs.constants.R_OK);
-
       const json = fs.readFileSync(path, "utf8");
 
       const { name, peerDependencies, dependencies, ...other } = JSON.parse(
         json
       );
 
-      /**
-       * check src/index readability
-       */
+      // SUPPOSE I HAVE .ts? this i s a bug.
       const sourcePath = resolve(pkg, srcName, "index.js");
-
-      fs.accessSync(sourcePath, fs.constants.R_OK);
 
       const distPath = resolve(pkg, buildName);
 
