@@ -1,30 +1,8 @@
-const fs = require("fs");
 const glob = require("glob");
-const { resolve } = require("path");
 
-const { msg, success, error, warning } = require("@mytools/print");
+const { msg, success, error } = require("@mytools/print");
 
-/**
- * Validate `package.json` & `src` for given path.
- *
- * @param {string} dir
- * @returns {boolean} true if valid
- */
-function validateAccessability(dir) {
-  const pkgJson = resolve(dir, "package.json");
-  const src = resolve(dir, "src");
-
-  try {
-    fs.accessSync(pkgJson, fs.constants.R_OK);
-    fs.accessSync(src, fs.constants.R_OK);
-  } catch (e) {
-    warning(e);
-
-    return false;
-  }
-
-  return true;
-}
+const { validateAccessability } = require("./utils");
 
 /**
  *
