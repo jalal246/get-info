@@ -6,8 +6,11 @@ const { msg, success, error } = require("@mytools/print");
 const getPackagesPath = require("./getPackagesPath");
 
 /**
- * Gets package json for each directories by reading folders one by one. Returns
- * packagesPath that only contain valid src.
+ * Gets package json by path. Reads each passed directory. Then, Returns
+ * objects extracted form these json files including source and distention path.
+ *
+ * Note: this function validate accessability and throw error if there's
+ * something wrong in src/index.
  *
  * @export
  * @param {Object} input
@@ -21,6 +24,7 @@ const getPackagesPath = require("./getPackagesPath");
  * @returns {string} packInfo[].name
  * @returns {string} packInfo[].peerDependencies
  * @returns {string} packInfo[].dependencies
+ * @returns {...*}   other
  */
 function getJsonByPath({
   packagesPath = getPackagesPath(),
@@ -41,7 +45,9 @@ function getJsonByPath({
 
       const json = fs.readFileSync(path, "utf8");
 
-      const { name, peerDependencies, dependencies } = JSON.parse(json);
+      const { name, peerDependencies, dependencies, ...other } = JSON.parse(
+        json
+      );
 
       /**
        * check src/index readability
@@ -57,7 +63,8 @@ function getJsonByPath({
         distPath,
         name,
         peerDependencies,
-        dependencies
+        dependencies,
+        ...other
       };
     } catch (e) {
       error(`${e}`);
