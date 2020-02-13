@@ -9,7 +9,7 @@ const { msg, success, error } = require("@mytools/print");
  *
  * @param {Object} input
  * @param {string} input.dir  packages path [path="./packages/*"]
- * @returns Array contains packages directory
+ * @returns {Array} contains packages directory
  */
 function getPackagesPath({ dir = "./packages/*" } = {}) {
   msg(`Getting packages path in ${dir}`);
