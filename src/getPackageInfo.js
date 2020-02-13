@@ -4,17 +4,19 @@ const getPackagesPath = require("./getPackagesPath");
 const getJsonByPath = require("./getJsonByPath");
 
 /**
- *
+ * Gets package json by passing packages name. It depends on `getPackagesPath`
+ * to get correct path for each packages name then use `getJsonByPath` to
+ * extract objects form `package.json`.
  *
  * @param {Array} packagesName
  * @param {string} [buildName="dist"]
  * @param {string} [srcName="src"]
  * @returns {Object} info
  * @returns {boolean} info.isFiltered
- * @returns {Array} info.packagesInfo
- * @returns {Array} info.packagesPath
+ * @returns {Array} info.json
+ * @returns {Array} info.path
  */
-function getJson(packagesName, buildName = "dist", srcName = "src") {
+function getPackageInfo(packagesName, buildName = "dist", srcName = "src") {
   /**
    * get all packagesName.
    */
@@ -23,7 +25,7 @@ function getJson(packagesName, buildName = "dist", srcName = "src") {
   /**
    * extract json form each package.
    */
-  const allPackagesInfo = getJsonByPath({
+  const allPackagesJson = getJsonByPath({
     packagesName: allPackagesPath,
 
     buildFileName: buildName,
@@ -31,7 +33,7 @@ function getJson(packagesName, buildName = "dist", srcName = "src") {
   });
 
   let isFiltered = false;
-  let filteredInfo = [];
+  let filteredJson = [];
   let filteredPath = [];
 
   if (packagesName.length !== 0) {
@@ -39,7 +41,7 @@ function getJson(packagesName, buildName = "dist", srcName = "src") {
 
     isFiltered = true;
 
-    filteredInfo = allPackagesInfo.filter(({ name }, i) => {
+    filteredJson = allPackagesJson.filter(({ name }, i) => {
       if (packagesName.includes(name)) {
         filteredPath.push(allPackagesPath[i]);
         return true;
@@ -50,15 +52,15 @@ function getJson(packagesName, buildName = "dist", srcName = "src") {
   } else {
     msg(`Getting all packagesName ${allPackagesPath.length}`);
 
-    filteredInfo = allPackagesInfo;
+    filteredJson = allPackagesJson;
     filteredPath = allPackagesPath;
   }
 
   return {
     isFiltered,
-    packagesInfo: filteredInfo,
-    packagesPath: filteredPath
+    json: filteredJson,
+    path: filteredPath
   };
 }
 
-module.exports = getJson;
+module.exports = getPackageInfo;

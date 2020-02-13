@@ -33,7 +33,8 @@
     "filter"
   ],
   "dependencies": {
-    "@mytools/print": "^0.1.3"
+    "@mytools/print": "^0.1.3",
+    "glob": "^7.1.6"
   },
   "devDependencies": {
     "chai": "^4.2.0",
