@@ -12,7 +12,6 @@ const getPackagesPath = require("./getPackagesPath");
  * Note: this function validate accessability and throw error if there's
  * something wrong in src/index.
  *
- * @export
  * @param {Object} input
  * @param {Array} input.packagesPath
  * @param {string} input.buildName [buildName="dist"]
