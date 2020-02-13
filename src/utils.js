@@ -25,4 +25,17 @@ function validateAccessability(dir) {
   return true;
 }
 
-module.exports = { validateAccessability };
+/**
+ * Filters array of paths by validate each path. Make sure it has `package.json`
+ * and `src`.
+ *
+ * @param {Array} pkgPath
+ * @returns {Array} filter Array
+ */
+function filterPathAccessability(pkgPath = []) {
+  const filtered = pkgPath.filter(pkgDir => validateAccessability(pkgDir));
+
+  return filtered;
+}
+
+module.exports = { validateAccessability, filterPathAccessability };

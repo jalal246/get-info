@@ -2,7 +2,7 @@ const glob = require("glob");
 
 const { msg, success, error } = require("@mytools/print");
 
-const { validateAccessability } = require("./utils");
+const { validateAccessability, filterPathAccessability } = require("./utils");
 
 /**
  *
@@ -31,7 +31,7 @@ function getPackagesPath({ dir = "./packages/*", isFilter = true } = {}) {
       error("Unable to read package form project root directory");
     }
   } else if (isFilter) {
-    folders = folders.filter(pkgDir => validateAccessability(pkgDir));
+    folders = filterPathAccessability(folders);
   }
 
   success(`> Found ${folders.length} packages`);
