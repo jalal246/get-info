@@ -1,7 +1,22 @@
 const fs = require("fs");
 const { resolve } = require("path");
 
-const { warning } = require("@mytools/print");
+const { warning, error } = require("@mytools/print");
+
+function getFileExtension(dir) {
+  const files = fs.readdirSync(dir);
+
+  const indx = files.find(file => {
+    return file.includes("index");
+  });
+
+  if (!indx) {
+    error(`Unable to detect extension. Can't find src/index`);
+  }
+  const extension = indx.split(".").pop();
+
+  return extension;
+}
 
 /**
  * Validate `package.json` & `src` for given path.
@@ -9,13 +24,16 @@ const { warning } = require("@mytools/print");
  * @param {string} dir
  * @returns {boolean} true if valid
  */
-function validateAccessability(dir) {
+function validateAccessability(dir, srcName = "src") {
   const pkgJson = resolve(dir, "package.json");
-  const src = resolve(dir, "src");
+  const src = resolve(dir, srcName);
 
   try {
     fs.accessSync(pkgJson, fs.constants.R_OK);
-    fs.accessSync(src, fs.constants.R_OK);
+
+    const ext = getFileExtension(src);
+    const fullSrc = resolve(src, `index.${ext}`);
+    fs.accessSync(fullSrc, fs.constants.R_OK);
   } catch (e) {
     warning(e);
 
@@ -38,4 +56,8 @@ function filterPathAccessability(pkgPath = []) {
   return filtered;
 }
 
-module.exports = { validateAccessability, filterPathAccessability };
+module.exports = {
+  getFileExtension,
+  validateAccessability,
+  filterPathAccessability
+};
