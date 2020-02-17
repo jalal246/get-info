@@ -12,12 +12,15 @@ const { validateAccessability, filterPathAccessability } = require("./utils");
  * @param {Object} input
  * @param {string} input.dir  packages path [path="./packages/*"]
  * @param {boolean} input.isFilter isFilter paths [isFilter=true]
- * @returns {Array} contains packages directory
+ * @returns {Object} result
+ * @returns {Array} result.paths valid paths directory
+ * @returns {Array} result.ext extension for each path (js, ts)
  */
 function getPackagesPath({ dir = "./packages/*", isFilter = true } = {}) {
   msg(`Getting packages path in ${dir}`);
 
   let folders = [];
+  let ext = [];
 
   folders = glob.sync(dir);
 
@@ -25,18 +28,21 @@ function getPackagesPath({ dir = "./packages/*", isFilter = true } = {}) {
    * If length is zero, not monorepo.
    */
   if (folders.length === 0) {
-    if (validateAccessability(".")) {
+    ext = validateAccessability(".");
+
+    if (ext) {
       folders.push(".");
+      ext.push(ext);
     } else {
       error("Unable to read package form project root directory");
     }
   } else if (isFilter) {
-    folders = filterPathAccessability(folders);
+    ({ filtered: folders, ext } = filterPathAccessability(folders));
   }
 
   success(`> Found ${folders.length} packages`);
 
-  return folders;
+  return { paths: folders, ext };
 }
 
 module.exports = getPackagesPath;

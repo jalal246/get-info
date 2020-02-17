@@ -2,13 +2,14 @@ const { expect } = require("chai");
 
 const { getPackagesPath, setIsSilent } = require("../src");
 
-setIsSilent(true);
-
 describe("testing getPackagesPath()", () => {
+  setIsSilent(true);
   it("returns array contains paths for all-valid packages", () => {
-    const packagesPath = getPackagesPath({ dir: "./test/packages-valid/*" });
+    const { paths: packagesPath, ext } = getPackagesPath({
+      dir: "./test/packages-valid/*"
+    });
 
-    const expected = [
+    const expectedPaths = [
       "./test/packages-valid/folo-forms",
       "./test/packages-valid/folo-layout",
       "./test/packages-valid/folo-utils",
@@ -16,19 +17,23 @@ describe("testing getPackagesPath()", () => {
       "./test/packages-valid/folo-withcontext"
     ];
 
-    expect(packagesPath).to.deep.equal(expected);
+    const expectedExtensions = ["js", "js", "js", "js", "js"];
+    expect(packagesPath).to.deep.equal(expectedPaths);
+    expect(ext).to.deep.equal(expectedExtensions);
   });
 
   it("returns filtered array contains only valid packages", () => {
-    const packagesPath = getPackagesPath({ dir: "./test/packages-invalid/*" });
+    const { paths: packagesPath } = getPackagesPath({
+      dir: "./test/packages-invalid/*"
+    });
 
     const expected = ["./test/packages-invalid/folo-forms"];
 
     expect(packagesPath).to.deep.equal(expected);
   });
 
-  it("returns non-array Array even if there's no package.json or src folder", () => {
-    const packagesPath = getPackagesPath({
+  it("returns non-filtered Array even if there's no package.json or src folder", () => {
+    const { paths: packagesPath } = getPackagesPath({
       dir: "./test/packages-invalid/*",
       isFilter: false
     });

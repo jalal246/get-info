@@ -52,17 +52,17 @@ function validateAccessability(dir, srcName = "src") {
  * @param {Array} pkgPath
  * @returns {Object} result
  * @returns {Array} result.filter valid paths
- * @returns {Array} result.extArr extension for each path (js, ts)
+ * @returns {Array} result.ext extension for each path (js, ts)
  */
 
 function filterPathAccessability(pkgPath = []) {
-  const extArr = [];
+  const ext = [];
 
   const filtered = pkgPath.filter(pkgDir => {
-    const ext = validateAccessability(pkgDir);
+    const pkgExt = validateAccessability(pkgDir);
 
-    if (ext) {
-      extArr.push(ext);
+    if (pkgExt) {
+      ext.push(pkgExt);
       return true;
     }
     return false;
@@ -70,7 +70,7 @@ function filterPathAccessability(pkgPath = []) {
 
   return {
     filtered,
-    extArr
+    ext
   };
 }
 
