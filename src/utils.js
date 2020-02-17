@@ -28,10 +28,12 @@ function validateAccessability(dir, srcName = "src") {
   const pkgJson = resolve(dir, "package.json");
   const src = resolve(dir, srcName);
 
+  let ext;
+
   try {
     fs.accessSync(pkgJson, fs.constants.R_OK);
 
-    const ext = getFileExtension(src);
+    ext = getFileExtension(src);
     const fullSrc = resolve(src, `index.${ext}`);
     fs.accessSync(fullSrc, fs.constants.R_OK);
   } catch (e) {
@@ -40,7 +42,7 @@ function validateAccessability(dir, srcName = "src") {
     return false;
   }
 
-  return true;
+  return ext;
 }
 
 /**
@@ -48,12 +50,28 @@ function validateAccessability(dir, srcName = "src") {
  * and `src`.
  *
  * @param {Array} pkgPath
- * @returns {Array} filter Array
+ * @returns {Object} result
+ * @returns {Array} result.filter valid paths
+ * @returns {Array} result.extArr extension for each path (js, ts)
  */
-function filterPathAccessability(pkgPath = []) {
-  const filtered = pkgPath.filter(pkgDir => validateAccessability(pkgDir));
 
-  return filtered;
+function filterPathAccessability(pkgPath = []) {
+  const extArr = [];
+
+  const filtered = pkgPath.filter(pkgDir => {
+    const ext = validateAccessability(pkgDir);
+
+    if (ext) {
+      extArr.push(ext);
+      return true;
+    }
+    return false;
+  });
+
+  return {
+    filtered,
+    extArr
+  };
 }
 
 module.exports = {
