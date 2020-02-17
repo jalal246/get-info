@@ -40,6 +40,10 @@ function getJsonByPath({
 
   if (!pkgPath) {
     packagesPath = getPackagesPath();
+
+    if (!packagesPath) {
+      error("Unable to detect pkgPath");
+    }
     isFiltered = true;
   } else if (isFiltered) {
     packagesPath = filterPathAccessability(pkgPath);
