@@ -16,7 +16,11 @@ const getJsonByPath = require("./getJsonByPath");
  * @returns {Array} info.json
  * @returns {Array} info.path
  */
-function getPackageInfo(packagesName, buildName = "dist", srcName = "src") {
+function getPackageInfo({
+  packagesName,
+  buildName = "dist",
+  srcName = "src"
+} = {}) {
   /**
    * get all packagesName.
    */
