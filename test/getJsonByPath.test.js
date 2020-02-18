@@ -21,12 +21,13 @@ describe("getJsonByPath", () => {
   });
 
   it("filters unfiltered paths then get packages Json for each", () => {
-    const { path } = getPackagesPath({
+    const { path, ext } = getPackagesPath({
       dir: "./test/packages-invalid/*"
     });
 
     const { json } = getJsonByPath({
-      path
+      path,
+      ext
     });
 
     expect(json.length).to.be.equal(1);

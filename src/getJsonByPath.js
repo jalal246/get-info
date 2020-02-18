@@ -29,24 +29,28 @@ const { filterPathAccessability } = require("./utils");
  */
 function getJsonByPath({
   path: userInputPath,
+  ext: userInputExt,
 
   buildName = "dist"
 } = {}) {
-  let path;
+  let path = userInputPath;
+  let ext = userInputExt;
 
-  let ext;
+  if (!path || !ext) {
+    msg(
+      `Unable to find path || ext ${path || ext}. Extract them automatically.`
+    );
 
-  if (!userInputPath) {
     ({ path, ext } = getPackagesPath());
 
     if (!path) {
       error("Unable to detect path");
     }
-  } else {
-    ({ path, ext } = filterPathAccessability(userInputPath));
   }
 
   msg("Reading package.json and setting path path");
+
+  const filteredExt = [];
 
   const packagesJson = path.map((pkg, i) => {
     const pkgPath = resolve(pkg, "package.json");
@@ -63,6 +67,8 @@ function getJsonByPath({
       const sourcePath = resolve(pkg, "src", `index.${pkgExt}`);
 
       const distPath = resolve(pkg, buildName);
+
+      filteredExt.push(pkgExt);
 
       return {
         sourcePath,
@@ -82,7 +88,7 @@ function getJsonByPath({
 
   success(`> Done extracting ${filteredPkgJson.length} packages json`);
 
-  return { json: filteredPkgJson, ext };
+  return { json: filteredPkgJson, ext: filteredExt };
 }
 
 module.exports = getJsonByPath;
