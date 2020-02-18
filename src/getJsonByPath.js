@@ -4,7 +4,6 @@ const fs = require("fs");
 const { msg, success, error } = require("@mytools/print");
 
 const getPackagesPath = require("./getPackagesPath");
-const { filterPathAccessability } = require("./utils");
 
 /**
  * Gets package json by path. Reads each passed directory. Then, Returns
