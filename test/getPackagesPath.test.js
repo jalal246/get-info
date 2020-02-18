@@ -2,7 +2,7 @@ const { expect } = require("chai");
 
 const { getPackagesPath, setIsSilent } = require("../src");
 
-describe("testing getPackagesPath()", () => {
+describe("getPackagesPath", () => {
   setIsSilent(true);
   it("returns array contains path for all-valid packages", () => {
     const { path, ext } = getPackagesPath({
