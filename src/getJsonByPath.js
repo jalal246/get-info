@@ -14,10 +14,10 @@ const { filterPathAccessability } = require("./utils");
  * something wrong in src/index.
  *
  * @param {Object} input
- * @param {Array} input.pkgPath Array contains paths
+ * @param {Array} input.pkgPath Array contains path
  * @param {string} input.buildName [buildName="dist"]
  * @param {string} input.srcName [srcName="src"]
- *  @param {boolean} input.isFilter isFilter paths [isFilter=true]
+ *  @param {boolean} input.isFilter isFilter path [isFilter=true]
  *
  * @returns {Object[]} packInfo
  * @returns {string} packInfo[].sourcePath
@@ -30,30 +30,25 @@ const { filterPathAccessability } = require("./utils");
 function getJsonByPath({
   pkgPath,
 
-  buildName = "dist",
-  srcName = "src",
-
-  isFilter = true
+  buildName = "dist"
 } = {}) {
   let packagesPath;
-  let isFiltered = isFilter;
+
+  let ext;
 
   if (!pkgPath) {
-    packagesPath = getPackagesPath();
+    ({ path: packagesPath, ext } = getPackagesPath());
 
     if (!packagesPath) {
       error("Unable to detect pkgPath");
     }
-    isFiltered = true;
-  } else if (isFiltered) {
-    packagesPath = filterPathAccessability(pkgPath);
   } else {
-    packagesPath = pkgPath;
+    ({ filtered: packagesPath, ext } = filterPathAccessability(pkgPath));
   }
 
-  msg("Reading package.json and setting packagesPath paths");
+  msg("Reading package.json and setting packagesPath path");
 
-  const packagesJson = packagesPath.map(pkg => {
+  const packagesJson = packagesPath.map((pkg, i) => {
     const path = resolve(pkg, "package.json");
 
     try {
@@ -63,8 +58,9 @@ function getJsonByPath({
         json
       );
 
-      // SUPPOSE I HAVE .ts? this i s a bug.
-      const sourcePath = resolve(pkg, srcName, "index.js");
+      const pkgExt = ext[i];
+
+      const sourcePath = resolve(pkg, "src", `index.${pkgExt}`);
 
       const distPath = resolve(pkg, buildName);
 

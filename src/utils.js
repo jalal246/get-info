@@ -46,19 +46,19 @@ function validateAccessability(dir, srcName = "src") {
 }
 
 /**
- * Filters array of paths by validate each path. Make sure it has `package.json`
+ * Filters array of path by validate each path. Make sure it has `package.json`
  * and `src`.
  *
  * @param {Array} pkgPath
  * @returns {Object} result
- * @returns {Array} result.filter valid paths
+ * @returns {Array} result.path filtered valid paths
  * @returns {Array} result.ext extension for each path (js, ts)
  */
 
 function filterPathAccessability(pkgPath = []) {
   const ext = [];
 
-  const filtered = pkgPath.filter(pkgDir => {
+  const filteredPaths = pkgPath.filter(pkgDir => {
     const pkgExt = validateAccessability(pkgDir);
 
     if (pkgExt) {
@@ -69,7 +69,7 @@ function filterPathAccessability(pkgPath = []) {
   });
 
   return {
-    filtered,
+    path: filteredPaths,
     ext
   };
 }
