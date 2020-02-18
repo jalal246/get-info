@@ -27,11 +27,11 @@ function getPackagesPath({ dir = "./packages/*" } = {}) {
    * If length is zero, not monorepo.
    */
   if (path.length === 0) {
-    ext = validateAccessability(".");
+    const pkgExt = validateAccessability(".");
 
-    if (ext) {
+    if (pkgExt) {
       path.push(".");
-      ext.push(ext);
+      ext.push(pkgExt);
     } else {
       error("Unable to read package form project root directory");
     }
