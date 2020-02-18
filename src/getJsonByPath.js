@@ -14,7 +14,7 @@ const { filterPathAccessability } = require("./utils");
  * something wrong in src/index.
  *
  * @param {Object} input
- * @param {Array} input.pkgPath Array contains path
+ * @param {Array} input.userInputPath Array contains path
  * @param {string} input.buildName [buildName="dist"]
  * @param {string} input.srcName [srcName="src"]
  *  @param {boolean} input.isFilter isFilter path [isFilter=true]
@@ -28,31 +28,31 @@ const { filterPathAccessability } = require("./utils");
  * @returns {...*}   other
  */
 function getJsonByPath({
-  pkgPath,
+  path: userInputPath,
 
   buildName = "dist"
 } = {}) {
-  let packagesPath;
+  let path;
 
   let ext;
 
-  if (!pkgPath) {
-    ({ path: packagesPath, ext } = getPackagesPath());
+  if (!userInputPath) {
+    ({ path, ext } = getPackagesPath());
 
-    if (!packagesPath) {
-      error("Unable to detect pkgPath");
+    if (!path) {
+      error("Unable to detect path");
     }
   } else {
-    ({ filtered: packagesPath, ext } = filterPathAccessability(pkgPath));
+    ({ path, ext } = filterPathAccessability(userInputPath));
   }
 
-  msg("Reading package.json and setting packagesPath path");
+  msg("Reading package.json and setting path path");
 
-  const packagesJson = packagesPath.map((pkg, i) => {
-    const path = resolve(pkg, "package.json");
+  const packagesJson = path.map((pkg, i) => {
+    const pkgPath = resolve(pkg, "package.json");
 
     try {
-      const json = fs.readFileSync(path, "utf8");
+      const json = fs.readFileSync(pkgPath, "utf8");
 
       const { name, peerDependencies, dependencies, ...other } = JSON.parse(
         json
@@ -78,11 +78,11 @@ function getJsonByPath({
     }
   });
 
-  const filtered = packagesJson.filter(Boolean);
+  const filteredPkgJson = packagesJson.filter(Boolean);
 
-  success(`> Done extracting ${filtered.length} packagesPath`);
+  success(`> Done extracting ${filteredPkgJson.length} packages json`);
 
-  return filtered;
+  return { json: filteredPkgJson, ext };
 }
 
 module.exports = getJsonByPath;
