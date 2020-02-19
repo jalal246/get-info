@@ -4,6 +4,12 @@ const { getPackagesPath, setIsSilent } = require("../src");
 
 describe("getPackagesPath", () => {
   setIsSilent(true);
+  it("Default: gets root path", () => {
+    const { path, ext } = getPackagesPath();
+    expect(path).to.deep.equal(["."]);
+    expect(ext).to.deep.equal(["js"]);
+  });
+
   it("returns array contains path for all-valid packages", () => {
     const { path, ext } = getPackagesPath({
       dir: "./test/packages-valid/*"
@@ -34,19 +40,4 @@ describe("getPackagesPath", () => {
     expect(path).to.deep.equal(expected);
     expect(ext).to.deep.equal(expectedExtensions);
   });
-
-  // it("returns non-filtered Array even if there's no package.json or src folder", () => {
-  //   const { path: packagesPath } = getPackagesPath({
-  //     dir: "./test/packages-invalid/*",
-  //     isFilter: false
-  //   });
-
-  //   const expected = [
-  //     "./test/packages-invalid/folo-forms",
-  //     "./test/packages-invalid/folo-layout",
-  //     "./test/packages-invalid/folo-values"
-  //   ];
-
-  //   expect(packagesPath).to.deep.equal(expected);
-  // });
 });
