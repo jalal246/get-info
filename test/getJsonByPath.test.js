@@ -17,7 +17,7 @@ describe("getJsonByPath", () => {
     /**
      * By default, will read the project scr and package json.
      */
-    expect(json[0].name).to.be.equal("extractJson");
+    expect(json[0].name).to.be.equal("get-info");
   });
 
   it("filters unfiltered paths then get packages Json for each", () => {

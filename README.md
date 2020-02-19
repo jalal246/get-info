@@ -1,14 +1,14 @@
-# extractJson
+# get-info
 
 > Utility functions deal with files in your project. Make production easier :mag_right:
 
-`extractJson` Contains a bunch od functions read packages in root project,
+`get-info` Contains a bunch od functions read packages in root project,
 validate each package, return the path, JSON, and extension(js|ts) used for each
 one. As it is essentially created to deal with monorepos, it works as well for a
 single package project.
 
 ```bash
-npm install extractJson
+npm install get-info
 ```
 
 ## API
@@ -40,7 +40,7 @@ const { json, ext } = getPackagesInfo({ buildName, path, ext })(
 #### Example(1)
 
 ```js
-import { getPackagesInfo } from "extractJson";
+import { getPackagesInfo } from "get-info";
 
 const { ext, json, path } = getPackagesInfo()("myFav/project another/project");
 
@@ -79,13 +79,13 @@ const { json, ext } = getJsonByPath({ path, ext });
 #### Example(2)
 
 ```js
-import { getJsonByPath } from "extractJson";
+import { getJsonByPath } from "get-info";
 
 const { json, ext } = getJsonByPath();
 
 expect(json).to.be.an("Array");
 expect(json.length).to.be.equal(1);
-expect(json[0].name).to.be.equal("extractJson");
+expect(json[0].name).to.be.equal("get-info");
 ```
 
 ### getPackagesPath
@@ -106,7 +106,7 @@ const { path, ext } = getPackagesPath({ dir });
 #### Example(3)
 
 ```js
-import { getPackagesPath } from "extractJson";
+import { getPackagesPath } from "get-info";
 
 const { path, ext } = getPackagesPath();
 
@@ -129,7 +129,7 @@ Utility functions used in this project are also exported for further use.
 #### utils.getFileExtension
 
 ```js
-import { utils } from "extractJson";
+import { utils } from "get-info";
 
 /**
  * Loop inside a given directory looking for index. When find it, gets its
@@ -145,7 +145,7 @@ const extension = getFileExtension(dir);
 #### utils.validateAccessability
 
 ```js
-import { utils } from "extractJson";
+import { utils } from "get-info";
 
 /**
  * Validates access readability `package.json` & `src` for given path.
@@ -161,7 +161,7 @@ const extension = validateAccessability(dir, srcName);
 #### utils.filterPathAccessability
 
 ```js
-import { utils } from "extractJson";
+import { utils } from "get-info";
 
 /**
  * Filters array of path by validate each path. Make sure it has `package.json`
@@ -191,4 +191,4 @@ npm test
 
 ## License
 
-This project is licensed under the [GPL-3.0 License](https://github.com/jalal246/extractJson/blob/master/LICENSE)
+This project is licensed under the [GPL-3.0 License](https://github.com/jalal246/get-info/blob/master/LICENSE)

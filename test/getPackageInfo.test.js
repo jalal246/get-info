@@ -23,16 +23,16 @@ describe("getPackagesInfo", () => {
     /**
      * By default, will read the project scr and package json.
      */
-    expect(json[0].name).to.be.equal("extractJson");
+    expect(json[0].name).to.be.equal("get-info");
   });
 
   it("gets array of json with default path", () => {
-    const { json } = getPackagesInfo()("extractJson");
+    const { json } = getPackagesInfo()("get-info");
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(1);
 
-    expect(json[0].name).to.be.equal("extractJson");
+    expect(json[0].name).to.be.equal("get-info");
   });
 
   it("returns empty array when name is wrong", () => {

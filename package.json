@@ -1,8 +1,8 @@
 {
-  "name": "extractJson",
+  "name": "get-info",
   "version": "0.0.0",
   "main": "src/index.js",
-  "repository": "https://github.com/jalal246/extractJson.git",
+  "repository": "https://github.com/jalal246/get-info.git",
   "author": "Jalal Maskoun <jimmy002020@gmail.com>",
   "license": "LGPL-3.0",
   "scripts": {
