@@ -122,19 +122,64 @@ expect(path).to.deep.equal(expectedPaths);
 expect(ext).to.deep.equal(expectedExtensions);
 ```
 
-### utils
+### Utils
 
-utility functions used in this project is also exported for further use.
+Utility functions used in this project are also exported for further use.
+
+#### Utils.getFileExtension
 
 ```js
 import { utils } from "extractJson";
 
-const {
-  getFileExtension,
-  validateAccessability,
-  filterPathAccessability
-} = utils;
+/**
+ * Loop inside a given directory looking for index. When find it, gets its
+ * extension.
+ *
+ * @param {string} dir - given directory
+ * @returns {string} extension.
+ */
+const { getFileExtension } = utils;
+const extension = getFileExtension(dir);
 ```
+
+#### Utils.validateAccessability
+
+```js
+import { utils } from "extractJson";
+
+/**
+ * Validates access readability `package.json` & `src` for given path.
+ *
+ * @param {string} dir
+ * @param {string} [srcName="src"]
+ * @returns {string} extension
+ */
+const { validateAccessability } = utils;
+const extension = validateAccessability(dir, srcName);
+```
+
+#### Utils.filterPathAccessability
+
+```js
+import { utils } from "extractJson";
+
+/**
+ * Filters array of path by validate each path. Make sure it has `package.json`
+ * and `src`.
+ *
+ * @param {Array} [pkgPath=[]]
+ * @returns {Object} results[]
+ * @returns {Array} results[].path filtered valid paths
+ * @returns {Array} results[].ext extension for each path (js|ts)
+ */
+const { filterPathAccessability } = utils;
+const { path, ext } = filterPathAccessability(pkgPath);
+```
+
+### Related projects
+
+[packageSorter](https://github.com/jalal246/packageSorter) - Sorting packages for monorepos production.
+[builderz](https://github.com/jalal246/builderz) - Building your project with zero config.
 
 ## Tests
 
