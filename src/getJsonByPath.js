@@ -6,24 +6,22 @@ const { msg, success, error } = require("@mytools/print");
 const getPackagesPath = require("./getPackagesPath");
 
 /**
- * Gets package json by path. Reads each passed directory. Then, Returns
+ * Gets package json by path. Reads each passed directory. Then, returns
  * objects extracted form these json files including source and distention path.
  *
  * Note: this function validate accessability and throw error if there's
- * something wrong in src/index.
+ * something wrong in src/index.ext
  *
  * @param {Object} input
- * @param {Array} input.userInputPath Array contains path
- * @param {string} input.buildName [buildName="dist"]
- * @param {string} input.srcName [srcName="src"]
- *  @param {boolean} input.isFilter isFilter path [isFilter=true]
+ * @param {Array} input.path Array contains paths to each package
+ * @param {Array} input.ext Array contains extension associated to each package
  *
- * @returns {Object[]} packInfo
- * @returns {string} packInfo[].sourcePath
- * @returns {string} packInfo[].distPath
- * @returns {string} packInfo[].name
- * @returns {string} packInfo[].peerDependencies
- * @returns {string} packInfo[].dependencies
+ * @returns {Object[]} pkgInfo is an object of arrays
+ * @returns {string} pkgInfo[].sourcePath
+ * @returns {string} pkgInfo[].distPath
+ * @returns {string} pkgInfo[].name
+ * @returns {Object} pkgInfo[].peerDependencies
+ * @returns {Object} pkgInfo[].dependencies
  * @returns {...*}   other
  */
 function getJsonByPath({

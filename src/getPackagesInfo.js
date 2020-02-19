@@ -4,16 +4,16 @@ const getPackagesPath = require("./getPackagesPath");
 const getJsonByPath = require("./getJsonByPath");
 
 /**
- * Gets package json by passing packages name. It depends on `getPackagesPath`
- * to get correct path for each packages name then use `getJsonByPath` to
- * extract objects form `package.json`.
+ * Gets package full info by passed name of packages.
  *
- * @param {Array} packagesName
- * @param {string} [buildName="dist"]
- * @returns {Object} result
- * @returns {Array} result.ext
- * @returns {Array} result.json
- * @returns {Array} result.path
+ * @param {Object} input
+ * @param {Array} input.path Array contains paths to each package
+ * @param {Array} input.ext Array contains extension associated to each package
+ * @param {string} [input.buildName="dist"]
+ * @returns {Object[]} results
+ * @returns {Array} results[].ext
+ * @returns {Array} results[].json
+ * @returns {Array} results[].path
  */
 function getPackagesInfo({
   buildName = "dist",

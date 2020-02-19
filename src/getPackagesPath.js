@@ -10,10 +10,10 @@ const { validateAccessability, filterPathAccessability } = require("./utils");
  * using `validateAccessability`
  *
  * @param {Object} input
- * @param {string} input.dir  packages path [path="./packages/*"]
- * @returns {Object} result
- * @returns {Array} result.path valid path directory
- * @returns {Array} result.ext extension for each path (js, ts)
+ * @param {string} input.dir  packages main directory [dir="./packages/*"]
+ * @returns {Object[]} results
+ * @returns {Array} results[].path valid path directory
+ * @returns {Array} results[].ext extension for each path (js|ts)
  */
 function getPackagesPath({ dir = "./packages/*" } = {}) {
   msg(`Getting packages path in ${dir}`);
