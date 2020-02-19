@@ -3,6 +3,13 @@ const { resolve } = require("path");
 
 const { warning, error } = require("@mytools/print");
 
+/**
+ * Loop inside a given directory looking for index. When find it, gets its
+ * extension.
+ *
+ * @param {string} dir - given directory
+ * @returns {string} extension.
+ */
 function getFileExtension(dir) {
   const files = fs.readdirSync(dir);
 
@@ -19,10 +26,11 @@ function getFileExtension(dir) {
 }
 
 /**
- * Validate `package.json` & `src` for given path.
+ * Validates access readability `package.json` & `src` for given path.
  *
  * @param {string} dir
- * @returns {boolean} true if valid
+ * @param {string} [srcName="src"]
+ * @returns {string} extension.
  */
 function validateAccessability(dir, srcName = "src") {
   const pkgJson = resolve(dir, "package.json");
@@ -49,12 +57,11 @@ function validateAccessability(dir, srcName = "src") {
  * Filters array of path by validate each path. Make sure it has `package.json`
  * and `src`.
  *
- * @param {Array} pkgPath
+ * @param {Array} [pkgPath=[]]
  * @returns {Object} result
  * @returns {Array} result.path filtered valid paths
  * @returns {Array} result.ext extension for each path (js, ts)
  */
-
 function filterPathAccessability(pkgPath = []) {
   const ext = [];
 
