@@ -1,6 +1,6 @@
 const glob = require("glob");
 
-const { msg, success, error } = require("@mytools/print");
+const { success, error } = require("@mytools/print");
 
 const { validateAccessability, filterPathAccessability } = require("./utils");
 
@@ -16,8 +16,6 @@ const { validateAccessability, filterPathAccessability } = require("./utils");
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
 function getPackagesPath({ dir = "./packages/*" } = {}) {
-  msg(`Getting packages path in ${dir}`);
-
   let path = [];
   let ext = [];
 
@@ -39,7 +37,7 @@ function getPackagesPath({ dir = "./packages/*" } = {}) {
     ({ path, ext } = filterPathAccessability(path));
   }
 
-  success(`> Found ${path.length} packages`);
+  success(`> Found ${path.length} packages `);
 
   return { path, ext };
 }
