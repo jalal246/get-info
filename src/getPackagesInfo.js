@@ -52,7 +52,7 @@ function getPackagesInfo({
       };
     }
 
-    msg(`Matching given packagesName name with dir`);
+    msg(`Matching given packages name with dir`);
 
     const filteredExt = [];
     const filteredPath = [];
