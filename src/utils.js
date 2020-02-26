@@ -40,13 +40,14 @@ function validateAccess(dir = ".", ext, srcName = "src") {
   const pkgJson = resolve(dir, "package.json");
   const src = resolve(dir, srcName);
 
-  const fileExt = ext || getFileExtension(src);
+  let fileExt;
 
   let isValid = true;
 
   try {
     fs.accessSync(pkgJson, fs.constants.R_OK);
 
+    fileExt = ext || getFileExtension(src);
     const fullSrc = resolve(src, `index.${fileExt}`);
     fs.accessSync(fullSrc, fs.constants.R_OK);
   } catch (e) {
