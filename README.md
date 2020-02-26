@@ -17,7 +17,7 @@ If not passed path or ext (more likely you don't need to), then all functions
 can automatically read the current project directory whether it is `packages/**/src`or
 `./src`
 
-### getPackagesInfo
+### getJsonByName
 
 ```js
 /**
@@ -32,17 +32,15 @@ can automatically read the current project directory whether it is `packages/**/
  * @returns {Array} results[].json
  * @returns {Array} results[].path
  */
-const { json, ext } = getPackagesInfo({ buildName, path, ext })(
-  ...packagesName
-);
+const { json, ext } = getJsonByName({ buildName, path, ext })(...packagesName);
 ```
 
 #### Example(1)
 
 ```js
-import { getPackagesInfo } from "get-info";
+import { getJsonByName } from "get-info";
 
-const { ext, json, path } = getPackagesInfo()("myFav/project another/project");
+const { ext, json, path } = getJsonByName()("myFav/project another/project");
 
 expect(json).to.be.an("Array");
 
