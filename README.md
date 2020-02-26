@@ -14,10 +14,10 @@ npm install get-info
 ## API
 
 If not passed path or ext (more likely you don't need to), then all functions
-can automatically read the current project directory whether it is `packages/**/src`or
-`./src`
+can automatically read the current project directory whether it is
+`packages/**/src` or `./src`
 
-### getPackagesInfo
+### getJsonByName
 
 ```js
 /**
@@ -32,17 +32,15 @@ can automatically read the current project directory whether it is `packages/**/
  * @returns {Array} results[].json
  * @returns {Array} results[].path
  */
-const { json, ext } = getPackagesInfo({ buildName, path, ext })(
-  ...packagesName
-);
+const { json, ext } = getJsonByName({ buildName, path, ext })(...packagesName);
 ```
 
 #### Example(1)
 
 ```js
-import { getPackagesInfo } from "get-info";
+import { getJsonByName } from "get-info";
 
-const { ext, json, path } = getPackagesInfo()("myFav/project another/project");
+const { ext, json, path } = getJsonByName()("myFav/project another/project");
 
 expect(json).to.be.an("Array");
 
@@ -142,38 +140,42 @@ const { getFileExtension } = utils;
 const extension = getFileExtension(dir);
 ```
 
-#### utils.validateAccessability
+#### utils.validateAccess
 
 ```js
 import { utils } from "get-info";
+const { validateAccess } = utils;
 
 /**
  * Validates access readability `package.json` & `src` for given path.
  *
- * @param {string} dir
+ * @param {string} [dir="."]
+ * @param {string} [ext=getFileExtension(dir/src)]
  * @param {string} [srcName="src"]
- * @returns {string} extension
+ *
+ * @returns {Object} result
+ * @returns {boolean} result.isValid
+ * @returns {string} result.ext
  */
-const { validateAccessability } = utils;
-const extension = validateAccessability(dir, srcName);
+const { isValid, ext } = validateAccess(dir, ext, srcName);
 ```
 
-#### utils.filterPathAccessability
+#### utils.filterPathAccess
 
 ```js
 import { utils } from "get-info";
+const { filterPathAccess } = utils;
 
 /**
- * Filters array of path by validate each path. Make sure it has `package.json`
- * and `src`.
+ * Filters array of paths by validate each path. Makes sure it has
+ * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
  * @returns {Object} results[]
  * @returns {Array} results[].path filtered valid paths
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-const { filterPathAccessability } = utils;
-const { path, ext } = filterPathAccessability(pkgPath);
+const { path, ext } = filterPathAccess(pkgPath);
 ```
 
 ### Related projects
@@ -181,7 +183,8 @@ const { path, ext } = filterPathAccessability(pkgPath);
 - [packageSorter](https://github.com/jalal246/packageSorter) - Sorting packages
   for monorepos production.
 
-- [builderz](https://github.com/jalal246/builderz) - Building your project with.
+- [builderz](https://github.com/jalal246/builderz) - Building your project with
+
   zero config.
 
 - [corename](https://github.com/jalal246/corename) - Extracts package name.

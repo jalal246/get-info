@@ -15,7 +15,7 @@ const getJsonByPath = require("./getJsonByPath");
  * @returns {Array} results[].json
  * @returns {Array} results[].path
  */
-function getPackagesInfo({
+function getJsonByName({
   buildName = "dist",
   path: userInputPath,
   ext: userInputExt
@@ -80,4 +80,4 @@ function getPackagesInfo({
   };
 }
 
-module.exports = getPackagesInfo;
+module.exports = getJsonByName;

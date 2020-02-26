@@ -4,7 +4,7 @@ const { resolve } = require("path");
 const { warning, error } = require("@mytools/print");
 
 /**
- * Loop inside a given directory looking for index. When find it, gets its
+ * Loop inside a given directory looking for index. When finds it, gets its
  * extension.
  *
  * @param {string} dir - given directory
@@ -18,7 +18,7 @@ function getFileExtension(dir) {
   });
 
   if (!indx) {
-    error(`Unable to detect extension. Can't find src/index`);
+    error(`getFileExtension: Unable to detect extension. Can't find src/index`);
   }
   const extension = indx.split(".").pop();
 
@@ -28,61 +28,64 @@ function getFileExtension(dir) {
 /**
  * Validates access readability `package.json` & `src` for given path.
  *
- * @param {string} dir
+ * @param {string} [dir="."]
+ * @param {string} [ext=getFileExtension(dir/src)]
  * @param {string} [srcName="src"]
- * @returns {string} extension.
+ *
+ * @returns {Object} result
+ * @returns {boolean} result.isValid
+ * @returns {string} result.ext
  */
-function validateAccessability(dir, srcName = "src") {
+function validateAccess(dir = ".", ext, srcName = "src") {
   const pkgJson = resolve(dir, "package.json");
   const src = resolve(dir, srcName);
 
-  let ext;
+  let fileExt;
+
+  let isValid = true;
 
   try {
     fs.accessSync(pkgJson, fs.constants.R_OK);
 
-    ext = getFileExtension(src);
-    const fullSrc = resolve(src, `index.${ext}`);
+    fileExt = ext || getFileExtension(src);
+    const fullSrc = resolve(src, `index.${fileExt}`);
     fs.accessSync(fullSrc, fs.constants.R_OK);
   } catch (e) {
     warning(e);
 
-    return false;
+    isValid = false;
   }
 
-  return ext;
+  return { isValid, ext: fileExt };
 }
 
 /**
- * Filters array of path by validate each path. Make sure it has `package.json`
- * and `src`.
+ * Filters array of paths by validate each path. Makes sure it has
+ * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
- * @returns {Object} result
- * @returns {Array} result.path filtered valid paths
- * @returns {Array} result.ext extension for each path (js, ts)
+ * @returns {Object} results[]
+ * @returns {Array} results[].path filtered valid paths
+ * @returns {Array} results[].ext extension for each path (js|ts)
  */
-function filterPathAccessability(pkgPath = []) {
-  const ext = [];
+function filterPathAccess(pkgPath = []) {
+  const filteredExt = [];
 
-  const filteredPaths = pkgPath.filter(pkgDir => {
-    const pkgExt = validateAccessability(pkgDir);
+  const filteredPath = pkgPath.filter(_pkgPath => {
+    const { isValid, ext } = validateAccess(_pkgPath);
 
-    if (pkgExt) {
-      ext.push(pkgExt);
+    if (isValid) {
+      filteredExt.push(ext);
       return true;
     }
     return false;
   });
 
-  return {
-    path: filteredPaths,
-    ext
-  };
+  return { path: filteredPath, ext: filteredExt };
 }
 
 module.exports = {
   getFileExtension,
-  validateAccessability,
-  filterPathAccessability
+  validateAccess,
+  filterPathAccess
 };

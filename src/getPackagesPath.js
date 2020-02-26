@@ -2,15 +2,15 @@ const glob = require("glob");
 
 const { success, error } = require("@mytools/print");
 
-const { validateAccessability, filterPathAccessability } = require("./utils");
+const { validateAccess, filterPathAccess } = require("./utils");
 
 /**
  *
  * Gets packages path for a given project source root. It filters each path
- * using `validateAccessability`
+ * using `validateAccess`
  *
  * @param {Object} input
- * @param {string} input.dir  packages main directory [dir="./packages/*"]
+ * @param {string} input.dir  packages root directory [dir="./packages/*"]
  * @returns {Object[]} results
  * @returns {Array} results[].path valid path directory
  * @returns {Array} results[].ext extension for each path (js|ts)
@@ -25,16 +25,18 @@ function getPackagesPath({ dir = "./packages/*" } = {}) {
    * If length is zero, not monorepo.
    */
   if (path.length === 0) {
-    const pkgExt = validateAccessability(".");
+    const { isValid, ext: fileExt } = validateAccess(".");
 
-    if (pkgExt) {
+    if (isValid) {
       path.push(".");
-      ext.push(pkgExt);
+      ext.push(fileExt);
     } else {
-      error("Unable to read package form project root directory");
+      error(
+        "getPackagesPath: Unable to read package form project root directory"
+      );
     }
   } else {
-    ({ path, ext } = filterPathAccessability(path));
+    ({ path, ext } = filterPathAccess(path));
   }
 
   success(`> Found ${path.length} packages `);

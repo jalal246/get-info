@@ -1,10 +1,10 @@
 const { expect } = require("chai");
-const { getPackagesInfo, getPackagesPath, setIsSilent } = require("../src");
+const { getJsonByName, getPackagesPath, setIsSilent } = require("../src");
 
-describe("getPackagesInfo", () => {
+describe("getJsonByName", () => {
   setIsSilent(true);
   it("Default: gets current path with ext and json", () => {
-    const { ext, json, path } = getPackagesInfo()();
+    const { ext, json, path } = getJsonByName()();
 
     expect(json).to.be.an("Array");
     expect(ext).to.be.an("Array");
@@ -26,8 +26,19 @@ describe("getPackagesInfo", () => {
     expect(json[0].name).to.be.equal("get-info");
   });
 
+  // TODO
+  // it("TODO: gets all packages for specific path", () => {
+  //   const { path } = getPackagesPath({
+  //     dir: "./test/packages-valid/*"
+  //   });
+
+  //   const { ext, json } = getJsonByName({
+  //     path
+  //   })();
+  // });
+
   it("gets array of json with default path", () => {
-    const { json } = getPackagesInfo()("get-info");
+    const { json } = getJsonByName()("get-info");
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(1);
@@ -36,7 +47,7 @@ describe("getPackagesInfo", () => {
   });
 
   it("returns empty array when name is wrong", () => {
-    const { json } = getPackagesInfo()("nothingTrue");
+    const { json } = getJsonByName()("nothingTrue");
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(0);
@@ -47,7 +58,7 @@ describe("getPackagesInfo", () => {
       dir: "./test/packages-valid/*"
     });
 
-    const { json } = getPackagesInfo({
+    const { json } = getJsonByName({
       path,
       ext
     })("folo/form", "folo/values");

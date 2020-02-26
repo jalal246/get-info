@@ -6,6 +6,7 @@ describe("getPackagesPath", () => {
   setIsSilent(true);
   it("Default: gets root path", () => {
     const { path, ext } = getPackagesPath();
+
     expect(path).to.deep.equal(["."]);
     expect(ext).to.deep.equal(["js"]);
   });
