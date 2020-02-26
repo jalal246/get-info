@@ -14,8 +14,8 @@ npm install get-info
 ## API
 
 If not passed path or ext (more likely you don't need to), then all functions
-can automatically read the current project directory whether it is `packages/**/src`or
-`./src`
+can automatically read the current project directory whether it is
+`packages/**/src` or `./src`
 
 ### getJsonByName
 
