@@ -2,12 +2,12 @@ const { setIsSilent } = require("@mytools/print");
 
 const getJsonByPath = require("./getJsonByPath");
 const getPackagesPath = require("./getPackagesPath");
-const getPackagesInfo = require("./getPackagesInfo");
+const getJsonByName = require("./getJsonByName");
 
 const utils = require("./utils");
 
 module.exports = {
-  getPackagesInfo,
+  getJsonByName,
   getPackagesPath,
   getJsonByPath,
 
