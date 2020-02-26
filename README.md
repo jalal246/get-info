@@ -152,14 +152,14 @@ const { validateAccess } = utils;
  * Validates access readability `package.json` & `src` for given path.
  *
  * @param {string} [dir="."]
- * @param {string} [ext=getFileExtension(dir)]
+ * @param {string} [ext=getFileExtension(dir/src)]
  * @param {string} [srcName="src"]
  *
  * @returns {Object} result
  * @returns {boolean} result.isValid
  * @returns {string} result.ext
  */
-const { isValid, ext }; = validateAccess(dir, ext, srcName);
+const { isValid, ext } = validateAccess(dir, ext, srcName);
 ```
 
 #### utils.filterPathAccess
