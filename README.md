@@ -183,9 +183,7 @@ const { path, ext } = filterPathAccess(pkgPath);
 - [packageSorter](https://github.com/jalal246/packageSorter) - Sorting packages
   for monorepos production.
 
-- [builderz](https://github.com/jalal246/builderz) - Building your project with
-
-  zero config.
+- [builderz](https://github.com/jalal246/builderz) - Building your project with zero config.
 
 - [corename](https://github.com/jalal246/corename) - Extracts package name.
 
