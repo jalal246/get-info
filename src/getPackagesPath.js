@@ -31,15 +31,17 @@ function getPackagesPath({ dir = "./packages/*" } = {}) {
       path.push(".");
       ext.push(fileExt);
     } else {
-      error("Unable to read package form project root directory");
+      error(
+        "getPackagesPath: Unable to read package form project root directory"
+      );
     }
+  } else {
+    ({ path, ext } = filterPathAccess(path));
   }
-
-  ({ path, ext } = filterPathAccess(path));
 
   success(`> Found ${path.length} packages `);
 
-  return { path: ext, ext };
+  return { path, ext };
 }
 
 module.exports = getPackagesPath;
