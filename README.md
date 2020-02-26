@@ -146,33 +146,38 @@ const extension = getFileExtension(dir);
 
 ```js
 import { utils } from "get-info";
+const { validateAccess } = utils;
 
 /**
  * Validates access readability `package.json` & `src` for given path.
  *
- * @param {string} dir
+ * @param {string} [dir="."]
+ * @param {string} [ext=getFileExtension(dir)]
  * @param {string} [srcName="src"]
- * @param {string} [ext="js"]
- * @returns {boolean} true|false
+ *
+ * @returns {Object} result
+ * @returns {boolean} result.isValid
+ * @returns {string} result.ext
  */
-const { validateAccess } = utils;
-const boolean = validateAccess(dir, ext, srcName);
+const { isValid, ext }; = validateAccess(dir, ext, srcName);
 ```
 
 #### utils.filterPathAccess
 
 ```js
 import { utils } from "get-info";
+const { filterPathAccess } = utils;
 
 /**
  * Filters array of paths by validate each path. Makes sure it has
  * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
- * @returns {Array} filtered valid paths
+ * @returns {Object} results[]
+ * @returns {Array} results[].path filtered valid paths
+ * @returns {Array} results[].ext extension for each path (js|ts)
  */
-const { filterPathAccess } = utils;
-const filteredPath = filterPathAccess(pkgPath);
+const { path, ext } = filterPathAccess(pkgPath);
 ```
 
 ### Related projects

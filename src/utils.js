@@ -28,16 +28,23 @@ function getFileExtension(dir) {
 /**
  * Validates access readability `package.json` & `src` for given path.
  *
- * @param {string} dir
+ * @param {string} [dir="."]
+ * @param {string} [ext=getFileExtension(dir)]
  * @param {string} [srcName="src"]
- * @param {string} [ext="js"]
- * @returns {boolean} true|false
+ *
+ * @returns {Object} result
+ * @returns {boolean} result.isValid
+ * @returns {string} result.ext
  */
-function validateAccess(dir, ext = "js", srcName = "src") {
-  if (!dir) return false;
-
+function validateAccess(
+  dir = ".",
+  ext = getFileExtension(dir),
+  srcName = "src"
+) {
   const pkgJson = resolve(dir, "package.json");
   const src = resolve(dir, srcName);
+
+  let isValid = true;
 
   try {
     fs.accessSync(pkgJson, fs.constants.R_OK);
@@ -47,10 +54,10 @@ function validateAccess(dir, ext = "js", srcName = "src") {
   } catch (e) {
     warning(e);
 
-    return false;
+    isValid = false;
   }
 
-  return true;
+  return { isValid, ext };
 }
 
 /**
@@ -58,12 +65,24 @@ function validateAccess(dir, ext = "js", srcName = "src") {
  * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
- * @returns {Array} filtered valid paths
+ * @returns {Object} results[]
+ * @returns {Array} results[].path filtered valid paths
+ * @returns {Array} results[].ext extension for each path (js|ts)
  */
 function filterPathAccess(pkgPath = []) {
-  return pkgPath.filter(pkgDir => {
-    return validateAccess(pkgDir);
+  const filteredExt = [];
+
+  const filteredPath = pkgPath.filter(_pkgPath => {
+    const { isValid, ext } = validateAccess(_pkgPath);
+
+    if (isValid) {
+      filteredExt.push(ext);
+      return true;
+    }
+    return false;
   });
+
+  return { path: filteredPath, ext: filteredExt };
 }
 
 module.exports = {
