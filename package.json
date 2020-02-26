@@ -1,6 +1,6 @@
 {
   "name": "get-info",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "src/index.js",
   "repository": "https://github.com/jalal246/get-info.git",
   "author": "Jalal Maskoun <jimmy002020@gmail.com>",
