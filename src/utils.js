@@ -54,13 +54,11 @@ function validateAccess(dir, ext = "js", srcName = "src") {
 }
 
 /**
- * Filters array of path by validate each path. Make sure it has `package.json`
- * and `src`.
+ * Filters array of paths by validate each path. Makes sure it has
+ * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
- * @returns {Object} result
- * @returns {Array} result.path filtered valid paths
- * @returns {Array} result.ext extension for each path (js, ts)
+ * @returns {Array} filtered valid paths
  */
 function filterPathAccess(pkgPath = []) {
   return pkgPath.filter(pkgDir => {

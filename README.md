@@ -165,16 +165,14 @@ const boolean = validateAccess(dir, ext, srcName);
 import { utils } from "get-info";
 
 /**
- * Filters array of path by validate each path. Make sure it has `package.json`
- * and `src`.
+ * Filters array of paths by validate each path. Makes sure it has
+ * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
- * @returns {Object} results[]
- * @returns {Array} results[].path filtered valid paths
- * @returns {Array} results[].ext extension for each path (js|ts)
+ * @returns {Array} filtered valid paths
  */
 const { filterPathAccess } = utils;
-const { path, ext } = filterPathAccess(pkgPath);
+const filteredPath = filterPathAccess(pkgPath);
 ```
 
 ### Related projects
