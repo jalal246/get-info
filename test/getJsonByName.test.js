@@ -26,19 +26,16 @@ describe("getJsonByName", () => {
     expect(json[0].name).to.be.equal("get-info");
   });
 
-  it.only("gets all packages for specific path", () => {
-    const { path } = getPackagesPath({
-      dir: "./test/packages-valid/*"
-    });
+  // TODO
+  // it("TODO: gets all packages for specific path", () => {
+  //   const { path } = getPackagesPath({
+  //     dir: "./test/packages-valid/*"
+  //   });
 
-    const { ext, json } = getJsonByName({ path })();
-    console.log("TCL: json", json);
-
-    /**
-     * By default, will read the project scr and package json.
-     */
-    // expect(json[0].name).to.be.equal("get-info");
-  });
+  //   const { ext, json } = getJsonByName({
+  //     path
+  //   })();
+  // });
 
   it("gets array of json with default path", () => {
     const { json } = getJsonByName()("get-info");
