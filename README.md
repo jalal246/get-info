@@ -152,10 +152,11 @@ import { utils } from "get-info";
  *
  * @param {string} dir
  * @param {string} [srcName="src"]
- * @returns {string} extension
+ * @param {string} [ext="js"]
+ * @returns {boolean} true|false
  */
 const { validateAccessability } = utils;
-const extension = validateAccessability(dir, srcName);
+const boolean = validateAccessability(dir, ext, srcName);
 ```
 
 #### utils.filterPathAccessability
