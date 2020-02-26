@@ -33,7 +33,7 @@ function getFileExtension(dir) {
  * @param {string} [ext="js"]
  * @returns {boolean} true|false
  */
-function validateAccessability(dir, ext = "js", srcName = "src") {
+function validateAccess(dir, ext = "js", srcName = "src") {
   if (!dir) return false;
 
   const pkgJson = resolve(dir, "package.json");
@@ -62,27 +62,14 @@ function validateAccessability(dir, ext = "js", srcName = "src") {
  * @returns {Array} result.path filtered valid paths
  * @returns {Array} result.ext extension for each path (js, ts)
  */
-function filterPathAccessability(pkgPath = []) {
-  const ext = [];
-
-  const filteredPaths = pkgPath.filter(pkgDir => {
-    const pkgExt = validateAccessability(pkgDir);
-
-    if (pkgExt) {
-      ext.push(pkgExt);
-      return true;
-    }
-    return false;
+function filterPathAccess(pkgPath = []) {
+  return pkgPath.filter(pkgDir => {
+    return validateAccess(pkgDir);
   });
-
-  return {
-    path: filteredPaths,
-    ext
-  };
 }
 
 module.exports = {
   getFileExtension,
-  validateAccessability,
-  filterPathAccessability
+  validateAccess,
+  filterPathAccess
 };

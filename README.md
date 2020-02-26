@@ -142,7 +142,7 @@ const { getFileExtension } = utils;
 const extension = getFileExtension(dir);
 ```
 
-#### utils.validateAccessability
+#### utils.validateAccess
 
 ```js
 import { utils } from "get-info";
@@ -155,11 +155,11 @@ import { utils } from "get-info";
  * @param {string} [ext="js"]
  * @returns {boolean} true|false
  */
-const { validateAccessability } = utils;
-const boolean = validateAccessability(dir, ext, srcName);
+const { validateAccess } = utils;
+const boolean = validateAccess(dir, ext, srcName);
 ```
 
-#### utils.filterPathAccessability
+#### utils.filterPathAccess
 
 ```js
 import { utils } from "get-info";
@@ -173,8 +173,8 @@ import { utils } from "get-info";
  * @returns {Array} results[].path filtered valid paths
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-const { filterPathAccessability } = utils;
-const { path, ext } = filterPathAccessability(pkgPath);
+const { filterPathAccess } = utils;
+const { path, ext } = filterPathAccess(pkgPath);
 ```
 
 ### Related projects

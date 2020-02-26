@@ -51,6 +51,7 @@ function getJsonByName({
         path
       };
     }
+    console.log("TCL: packagesName", packagesName);
 
     msg(`Matching given packages name with dir`);
 
