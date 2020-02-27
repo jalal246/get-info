@@ -2,15 +2,21 @@ const { expect } = require("chai");
 
 const { getPackagesPath, getJsonByPath, setIsSilent } = require("../src");
 
-describe("getJsonByPath", () => {
+describe.only("getJsonByPath", () => {
   setIsSilent(true);
   it("Default: Checks if monorepo or not and gets the json info", () => {
-    const { json } = getJsonByPath();
+    const { json, ext, distPath } = getJsonByPath()();
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(1);
+
+    expect(ext).to.be.an("Array");
+    expect(ext.length).to.be.equal(1);
+
+    expect(distPath).to.be.an("Array");
+    expect(distPath.length).to.be.equal(1);
+
     expect(json[0]).to.have.own.property("name");
-    expect(json[0]).to.have.own.property("distPath");
     expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
@@ -18,22 +24,19 @@ describe("getJsonByPath", () => {
      * By default, will read the project scr and package json.
      */
     expect(json[0].name).to.be.equal("get-info");
+    expect(ext[0]).to.be.equal("js");
   });
 
   it("returns all packages for given path", () => {
-    const { path, ext } = getPackagesPath({
+    const { path } = getPackagesPath({
       dir: "./test/packages-valid/*"
     });
 
-    const { json } = getJsonByPath({
-      path,
-      ext
-    });
+    const { json } = getJsonByPath()(...path);
 
     expect(json.length).to.be.equal(5);
 
     expect(json[0]).to.have.own.property("name");
-    expect(json[0]).to.have.own.property("distPath");
     expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
@@ -41,19 +44,15 @@ describe("getJsonByPath", () => {
   });
 
   it("filters unfiltered paths then get packages Json for each", () => {
-    const { path, ext } = getPackagesPath({
+    const { path } = getPackagesPath({
       dir: "./test/packages-invalid/*"
     });
 
-    const { json } = getJsonByPath({
-      path,
-      ext
-    });
+    const { json } = getJsonByPath()(...path);
 
     expect(json.length).to.be.equal(1);
 
     expect(json[0]).to.have.own.property("name");
-    expect(json[0]).to.have.own.property("distPath");
     expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
