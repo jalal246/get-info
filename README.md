@@ -59,7 +59,7 @@ expect(json[1].name).to.be.equal("@another/project");
  * paths.
  *
  * @param {string} [buildName="dist"]  contains paths to resolve and extracts info form.
- * @param {Array} paths contain paths to resolve and extracts info form.
+ * @param {string} paths contain paths to resolve and extracts info form.
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json packages json related to given path
