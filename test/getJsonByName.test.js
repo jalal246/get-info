@@ -16,7 +16,6 @@ describe("getJsonByName", () => {
 
     expect(ext[0]).to.be.equal("js");
     expect(path[0]).to.be.equal(".");
-    expect(json[0]).to.have.own.property("distPath");
     expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
@@ -26,25 +25,16 @@ describe("getJsonByName", () => {
     expect(json[0].name).to.be.equal("get-info");
   });
 
-  it.only("gets all packages for specific path", () => {
-    const { path } = getPackagesPath({
-      dir: "./test/packages-valid/*"
-    });
+  // TODO
+  // it("TODO: gets all packages for specific path", () => {
+  //   const { path } = getPackagesPath({
+  //     dir: "./test/packages-valid/*"
+  //   });
 
-    // const expectedPaths = [
-    //   "./test/packages-valid/folo-forms",
-    //   "./test/packages-valid/folo-layout",
-    //   "./test/packages-valid/folo-utils",
-    //   "./test/packages-valid/folo-values",
-    //   "./test/packages-valid/folo-withcontext"
-    // ];
-
-    const { ext, json } = getJsonByName({
-      path
-    })();
-
-    expect(json.length).to.be.equal(4);
-  });
+  //   const { ext, json } = getJsonByName({
+  //     path
+  //   })();
+  // });
 
   it("gets array of json with default path", () => {
     const { json } = getJsonByName()("get-info");

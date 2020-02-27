@@ -36,11 +36,7 @@ function getJsonByName({
     /**
      * extract json form each package.
      */
-    const { json } = getJsonByPath({
-      path,
-      ext,
-      buildName
-    });
+    const { json } = getJsonByPath(buildName)(...path);
 
     if (packagesName.length === 0) {
       msg(`Getting all packages`);
