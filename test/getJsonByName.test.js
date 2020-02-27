@@ -16,7 +16,6 @@ describe("getJsonByName", () => {
 
     expect(ext[0]).to.be.equal("js");
     expect(path[0]).to.be.equal(".");
-    expect(json[0]).to.have.own.property("distPath");
     expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 

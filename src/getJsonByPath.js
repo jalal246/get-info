@@ -1,75 +1,53 @@
+/* eslint-disable func-names */
+const { msg, success, error } = require("@mytools/print");
 const { resolve } = require("path");
 const fs = require("fs");
 
-const { msg, success, error } = require("@mytools/print");
-
 const getPackagesPath = require("./getPackagesPath");
 
+const { getFileExtension } = require("./utils");
+
+let buildName;
+let ext = [];
+
 /**
- * Gets package json by path. Reads each passed directory. Then, returns
- * objects extracted form these json files including source and distention path.
  *
- * Note: this function validate accessability and throw error if there's
- * something wrong in src/index.ext
+ * Extracts package json, extension, and resolved distention path for each given
+ * paths.
  *
- * @param {Object} input
- * @param {Array} input.path Array contains paths to each package
- * @param {Array} input.ext Array contains extension associated to each package
+ * @param {Array} defaultPaths  contains paths to resolve and extracts info form.
  *
- * @returns {Object[]} pkgInfo is an object of arrays
- * @returns {string} pkgInfo[].sourcePath
- * @returns {string} pkgInfo[].distPath
- * @returns {string} pkgInfo[].name
- * @returns {Object} pkgInfo[].peerDependencies
- * @returns {Object} pkgInfo[].dependencies
- * @returns {...*}   other
+ * @returns {Object[]} results
+ * @returns {Array} results[].json packages json related to given path
+ * @returns {Array} results[].ext extension (js|ts) related to every path
+ * @returns {Array} results[].distPath resolved distention path for every path
  */
-function getJsonByPath({
-  path: userInputPath,
-  ext: userInputExt,
-
-  buildName = "dist"
-} = {}) {
-  let path = userInputPath;
-  let ext = userInputExt;
-
-  if (!path || !ext) {
-    msg(
-      `Unable to find path || ext ${path || ext}. Extract them automatically.`
-    );
-
-    ({ path, ext } = getPackagesPath());
-
-    if (!path) {
-      error("Unable to detect path");
-    }
-  }
-
-  msg("Reading package.json and setting path path");
-
+function byPath(defaultPaths) {
   const filteredExt = [];
+  const distPath = [];
 
-  const packagesJson = path.map((pkg, i) => {
-    const pkgPath = resolve(pkg, "package.json");
+  const packagesJson = defaultPaths.map((pkgPath, i) => {
+    const pkgJson = resolve(pkgPath, "package.json");
 
     try {
-      const json = fs.readFileSync(pkgPath, "utf8");
+      const json = fs.readFileSync(pkgJson, "utf8");
 
       const { name, peerDependencies, dependencies, ...other } = JSON.parse(
         json
       );
 
-      const pkgExt = ext[i];
+      const pkgExt = ext[i] || getFileExtension(resolve(pkgPath, "src"));
 
-      const sourcePath = resolve(pkg, "src", `index.${pkgExt}`);
+      const sourcePath = resolve(pkgPath, "src", `index.${pkgExt}`);
 
-      const distPath = resolve(pkg, buildName);
+      const dist = resolve(pkgPath, buildName);
+
+      distPath.push(dist);
 
       filteredExt.push(pkgExt);
 
       return {
         sourcePath,
-        distPath,
         name,
         peerDependencies,
         dependencies,
@@ -85,7 +63,31 @@ function getJsonByPath({
 
   success(`> Done extracting ${filteredPkgJson.length} packages json`);
 
-  return { json: filteredPkgJson, ext: filteredExt };
+  return { json: filteredPkgJson, ext: filteredExt, distPath };
+}
+
+/**
+ * Wrapper function inits paths, ext and build name.
+ *
+ * @param {string} bName -buildName
+ * @returns {function}
+ */
+function getJsonByPath(bName) {
+  buildName = bName || "dist";
+
+  return function(...defaultPaths) {
+    let path;
+
+    if (defaultPaths.length === 0) {
+      msg(`Getting paths`);
+
+      ({ path, ext } = getPackagesPath());
+    } else {
+      path = defaultPaths;
+    }
+
+    return byPath(path);
+  };
 }
 
 module.exports = getJsonByPath;
