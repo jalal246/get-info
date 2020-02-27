@@ -26,16 +26,25 @@ describe("getJsonByName", () => {
     expect(json[0].name).to.be.equal("get-info");
   });
 
-  // TODO
-  // it("TODO: gets all packages for specific path", () => {
-  //   const { path } = getPackagesPath({
-  //     dir: "./test/packages-valid/*"
-  //   });
+  it.only("gets all packages for specific path", () => {
+    const { path } = getPackagesPath({
+      dir: "./test/packages-valid/*"
+    });
 
-  //   const { ext, json } = getJsonByName({
-  //     path
-  //   })();
-  // });
+    // const expectedPaths = [
+    //   "./test/packages-valid/folo-forms",
+    //   "./test/packages-valid/folo-layout",
+    //   "./test/packages-valid/folo-utils",
+    //   "./test/packages-valid/folo-values",
+    //   "./test/packages-valid/folo-withcontext"
+    // ];
+
+    const { ext, json } = getJsonByName({
+      path
+    })();
+
+    expect(json.length).to.be.equal(4);
+  });
 
   it("gets array of json with default path", () => {
     const { json } = getJsonByName()("get-info");
