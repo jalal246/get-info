@@ -54,12 +54,11 @@ expect(json[1].name).to.be.equal("@another/project");
 
 ```js
 /**
- *
  * Extracts package json, extension, and resolved distention path for each given
- * paths.
+ * path.
  *
- * @param {string} [buildName="dist"]  contains paths to resolve and extracts info form.
- * @param {string} paths contain paths to resolve and extracts info form.
+ * @param {string} [buildName="dist"]
+ * @param {string} paths contain paths to resolve and extracts info from
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json packages json related to given path
