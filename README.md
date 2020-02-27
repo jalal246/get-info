@@ -54,24 +54,19 @@ expect(json[1].name).to.be.equal("@another/project");
 
 ```js
 /**
- * Gets package json by path. Reads each passed directory. Then, returns
- * objects extracted form these json files including source and distention path.
  *
- * Note: this function validate accessability and throw error if there's
- * something wrong in src/index.ext
+ * Extracts package json, extension, and resolved distention path for each given
+ * paths.
  *
- * @param {Array} path Array contains paths to each package
- * @param {Array} ext Array contains extension associated to each package
+ * @param {string} [buildName="dist"]  contains paths to resolve and extracts info form.
+ * @param {Array} paths contain paths to resolve and extracts info form.
  *
- * @returns {Object[]} pkgInfo is an object of arrays
- * @returns {string} pkgInfo[].sourcePath
- * @returns {string} pkgInfo[].distPath
- * @returns {string} pkgInfo[].name
- * @returns {Object} pkgInfo[].peerDependencies
- * @returns {Object} pkgInfo[].dependencies
- * @returns {...*}   other
+ * @returns {Object[]} results
+ * @returns {Array} results[].json packages json related to given path
+ * @returns {Array} results[].ext extension (js|ts) related to every path
+ * @returns {Array} results[].distPath resolved distention path for every path
  */
-const { json, ext } = getJsonByPath({ path, ext });
+const { json, ext, distPath } = getJsonByPath(buildName)(...paths);
 ```
 
 #### Example(2)
@@ -79,11 +74,14 @@ const { json, ext } = getJsonByPath({ path, ext });
 ```js
 import { getJsonByPath } from "get-info";
 
-const { json, ext } = getJsonByPath();
+const { json, ext, distPath } = getJsonByPath()();
 
 expect(json).to.be.an("Array");
 expect(json.length).to.be.equal(1);
+
 expect(json[0].name).to.be.equal("get-info");
+expect(ext[0]).to.be.equal("js");
+expect(distPath[0]).to.be.equal(`${__dirname}/dist`);
 ```
 
 ### getPackagesPath
