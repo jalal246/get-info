@@ -20,6 +20,26 @@ describe("getJsonByPath", () => {
     expect(json[0].name).to.be.equal("get-info");
   });
 
+  it("returns all packages for given path", () => {
+    const { path, ext } = getPackagesPath({
+      dir: "./test/packages-valid/*"
+    });
+
+    const { json } = getJsonByPath({
+      path,
+      ext
+    });
+
+    expect(json.length).to.be.equal(5);
+
+    expect(json[0]).to.have.own.property("name");
+    expect(json[0]).to.have.own.property("distPath");
+    expect(json[0]).to.have.own.property("sourcePath");
+    expect(json[0]).to.have.own.property("dependencies");
+
+    expect(json[0].name).to.be.equal("@folo/forms");
+  });
+
   it("filters unfiltered paths then get packages Json for each", () => {
     const { path, ext } = getPackagesPath({
       dir: "./test/packages-invalid/*"
