@@ -9,13 +9,13 @@ const { validateAccess, filterPathAccess } = require("./utils");
  * Gets packages path for a given project source root. It filters each path
  * using `validateAccess`
  *
- * @param {Object} input
- * @param {string} input.dir  packages root directory [dir="./packages/*"]
+ * @param {string} [dir="./packages/*"]
+ *
  * @returns {Object[]} results
  * @returns {Array} results[].path valid path directory
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-function getPackagesPath({ dir = "./packages/*" } = {}) {
+function getPackagesPath(dir = "./packages/*") {
   let path = [];
   let ext = [];
 

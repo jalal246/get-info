@@ -28,9 +28,7 @@ describe("getJsonByPath", () => {
   });
 
   it("returns all packages for given path", () => {
-    const { path } = getPackagesPath({
-      dir: "./test/packages-valid/*"
-    });
+    const { path } = getPackagesPath("./test/packages-valid/*");
 
     const { json } = getJsonByPath()(...path);
 
@@ -44,9 +42,7 @@ describe("getJsonByPath", () => {
   });
 
   it("filters unfiltered paths then get packages Json for each", () => {
-    const { path } = getPackagesPath({
-      dir: "./test/packages-invalid/*"
-    });
+    const { path } = getPackagesPath("./test/packages-invalid/*");
 
     const { json } = getJsonByPath()(...path);
 

@@ -21,18 +21,18 @@ can automatically read the current project directory whether it is
 
 ```js
 /**
- * Gets package full info by passed name of packages.
+ * Extracts package json, extension, and resolved distention path for each given
+ * name.
  *
- * @param {Object} input
- * @param {Array} input.path Array contains paths to each package
- * @param {Array} input.ext Array contains extension associated to each package
- * @param {string} [input.buildName="dist"]
+ * @param {string} [buildName="dist"]
+ * @param {string} packagesNames contain names of required packages in repo.
+ *
  * @returns {Object[]} results
- * @returns {Array} results[].ext
- * @returns {Array} results[].json
- * @returns {Array} results[].path
+ * @returns {Array} results[].json - packages json related to given package-name
+ * @returns {Array} results[].ext - extension (js|ts) related to every package-name
+ * @returns {Array} results[].distPath - resolved distention path for every package-name
  */
-const { json, ext } = getJsonByName({ buildName, path, ext })(...packagesName);
+const { json, ext, distPath } = getJsonByName(buildName)(...packagesNames);
 ```
 
 #### Example(1)
@@ -61,9 +61,9 @@ expect(json[1].name).to.be.equal("@another/project");
  * @param {string} paths contain paths to resolve and extracts info from
  *
  * @returns {Object[]} results
- * @returns {Array} results[].json packages json related to given path
- * @returns {Array} results[].ext extension (js|ts) related to every path
- * @returns {Array} results[].distPath resolved distention path for every path
+ * @returns {Array} results[].json - packages json related to given path
+ * @returns {Array} results[].ext - extension (js|ts) related to every path
+ * @returns {Array} results[].distPath - resolved distention path for every path
  */
 const { json, ext, distPath } = getJsonByPath(buildName)(...paths);
 ```
@@ -90,12 +90,13 @@ expect(distPath[0]).to.be.equal(`${__dirname}/dist`);
  * Gets packages path for a given project source root. It filters each path
  * returns only packages contain valid src/index and have package.json
  *
- * @param {string} dir packages main directory [path="./packages/*"]
+ * @param {string} [dir="./packages/*"]
+ *
  * @returns {Object[]} results
  * @returns {Array} results[].path valid path directory
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-const { path, ext } = getPackagesPath({ dir });
+const { path, ext } = getPackagesPath(dir);
 ```
 
 #### Example(3)

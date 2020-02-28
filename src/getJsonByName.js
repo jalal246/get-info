@@ -1,78 +1,77 @@
-const { msg, error } = require("@mytools/print");
+/* eslint-disable func-names */
+const { msg, success } = require("@mytools/print");
 
-const getPackagesPath = require("./getPackagesPath");
 const getJsonByPath = require("./getJsonByPath");
 
+let json;
+let ext;
+let distPath;
+
 /**
- * Gets package full info by passed name of packages.
+ * Extracts package json, extension, and resolved distention path for each given
+ * packages name.
  *
- * @param {Object} input
- * @param {Array} input.path Array contains paths to each package
- * @param {Array} input.ext Array contains extension associated to each package
- * @param {string} [input.buildName="dist"]
+ * @param {Array} names required packages name
+ *
  * @returns {Object[]} results
- * @returns {Array} results[].ext
- * @returns {Array} results[].json
- * @returns {Array} results[].path
+ * @returns {Array} results[].json - packages json related to given path
+ * @returns {Array} results[].ext - extension (js|ts) related to every path
  */
-function getJsonByName({
-  buildName = "dist",
-  path: userInputPath,
-  ext: userInputExt
-} = {}) {
-  let path = userInputPath;
-  let ext = userInputExt;
+function byName(names) {
+  const filteredExt = [];
+  const filteredJson = [];
+  const filteredDistPath = [];
 
-  if (!path || !ext) {
-    ({ path, ext } = getPackagesPath());
-  }
+  names.forEach(packageName => {
+    for (let j = 0; j < json.length; j += 1) {
+      const { name } = json[j];
 
-  // eslint-disable-next-line func-names
-  return function(...packagesName) {
-    if (!path) {
-      error("Unable to detect path");
+      if (name.includes(packageName)) {
+        filteredJson.push(json[j]);
+        filteredExt.push(ext[j]);
+        filteredDistPath.push(distPath[j]);
+
+        // remove element from array so we don't check it again.
+        json.splice(j, 1);
+
+        break;
+      }
     }
+  });
 
+  success(`> Done finding ${filteredJson.length} packages`);
+
+  return {
+    json: filteredJson,
+    ext: filteredExt,
+    distPath: filteredDistPath
+  };
+}
+
+/**
+ * Wrapper function inits json, ext, distPath and buildName.
+ *
+ * @param {string} buildName
+ * @returns {function}
+ */
+function getJsonByName(buildName) {
+  return function(...defaultNames) {
     /**
      * extract json form each package.
      */
-    const { json } = getJsonByPath(buildName)(...path);
+    ({ json, ext, distPath } = getJsonByPath(buildName)());
 
-    if (packagesName.length === 0) {
+    if (defaultNames.length === 0) {
       msg(`Getting all packages`);
 
       return {
-        ext,
         json,
-        path
+        ext,
+        distPath
       };
     }
 
-    msg(`Matching given packages name with dir`);
-
-    const filteredExt = [];
-    const filteredPath = [];
-    const filteredJson = [];
-
-    packagesName.forEach(packageName => {
-      for (let j = 0; j < json.length; j += 1) {
-        const { name } = json[j];
-
-        if (name.includes(packageName)) {
-          filteredJson.push(json[j]);
-          filteredPath.push(path[j]);
-          filteredExt.push(ext[j]);
-
-          break;
-        }
-      }
-    });
-
-    return {
-      ext: filteredExt,
-      json: filteredJson,
-      path: filteredPath
-    };
+    return byName(defaultNames);
   };
 }
 
