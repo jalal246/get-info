@@ -11,16 +11,15 @@ let buildName;
 let ext = [];
 
 /**
- *
  * Extracts package json, extension, and resolved distention path for each given
- * paths.
+ * path.
  *
  * @param {Array} defaultPaths  contains paths to resolve and extracts info form.
  *
  * @returns {Object[]} results
- * @returns {Array} results[].json packages json related to given path
- * @returns {Array} results[].ext extension (js|ts) related to every path
- * @returns {Array} results[].distPath resolved distention path for every path
+ * @returns {Array} results[].json - packages json related to given path
+ * @returns {Array} results[].ext - extension (js|ts) related to every path
+ * @returns {Array} results[].distPath - resolved distention path for every path
  */
 function byPath(defaultPaths) {
   const filteredExt = [];

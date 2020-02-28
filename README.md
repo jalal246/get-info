@@ -61,9 +61,9 @@ expect(json[1].name).to.be.equal("@another/project");
  * @param {string} paths contain paths to resolve and extracts info from
  *
  * @returns {Object[]} results
- * @returns {Array} results[].json packages json related to given path
- * @returns {Array} results[].ext extension (js|ts) related to every path
- * @returns {Array} results[].distPath resolved distention path for every path
+ * @returns {Array} results[].json - packages json related to given path
+ * @returns {Array} results[].ext - extension (js|ts) related to every path
+ * @returns {Array} results[].distPath - resolved distention path for every path
  */
 const { json, ext, distPath } = getJsonByPath(buildName)(...paths);
 ```
