@@ -12,9 +12,7 @@ describe("getPackagesPath", () => {
   });
 
   it("returns array contains path for all-valid packages", () => {
-    const { path, ext } = getPackagesPath({
-      dir: "./test/packages-valid/*"
-    });
+    const { path, ext } = getPackagesPath("./test/packages-valid/*");
 
     const expectedPaths = [
       "./test/packages-valid/folo-forms",
@@ -30,9 +28,7 @@ describe("getPackagesPath", () => {
   });
 
   it("returns filtered array contains only valid packages", () => {
-    const { path, ext } = getPackagesPath({
-      dir: "./test/packages-invalid/*"
-    });
+    const { path, ext } = getPackagesPath("./test/packages-invalid/*");
 
     const expectedExtensions = ["js"];
 

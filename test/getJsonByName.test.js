@@ -53,9 +53,7 @@ describe("getJsonByName", () => {
   });
 
   it("gets array of path with ext and json for given path", () => {
-    const { path, ext } = getPackagesPath({
-      dir: "./test/packages-valid/*"
-    });
+    const { path, ext } = getPackagesPath("./test/packages-valid/*");
 
     const { json } = getJsonByName({
       path,
