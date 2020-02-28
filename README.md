@@ -21,18 +21,18 @@ can automatically read the current project directory whether it is
 
 ```js
 /**
- * Gets package full info by passed name of packages.
+ * Extracts package json, extension, and resolved distention path for each given
+ * path.
  *
- * @param {Object} input
- * @param {Array} input.path Array contains paths to each package
- * @param {Array} input.ext Array contains extension associated to each package
- * @param {string} [input.buildName="dist"]
+ * @param {string} [buildName="dist"]
+ * @param {string} packagesName contain names of required packages in repo.
+ *
  * @returns {Object[]} results
- * @returns {Array} results[].ext
- * @returns {Array} results[].json
- * @returns {Array} results[].path
+ * @returns {Array} results[].json - packages json related to given package-name
+ * @returns {Array} results[].ext - extension (js|ts) related to every package-name
+ * @returns {Array} results[].distPath - resolved distention path for every package-name
  */
-const { json, ext } = getJsonByName({ buildName, path, ext })(...packagesName);
+const { json, ext, distPath } = getJsonByName(buildName)(...packagesName);
 ```
 
 #### Example(1)

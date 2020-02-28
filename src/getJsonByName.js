@@ -48,6 +48,12 @@ function byName(names) {
   };
 }
 
+/**
+ * Wrapper function inits json, ext, distPath and buildName.
+ *
+ * @param {string} buildName
+ * @returns {function}
+ */
 function getJsonByName(buildName) {
   return function(...defaultNames) {
     /**
