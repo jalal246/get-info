@@ -78,7 +78,7 @@ function getJsonByPath(bName) {
     let path;
 
     if (defaultPaths.length === 0) {
-      msg(`Getting paths`);
+      msg(`Getting all paths`);
 
       ({ path, ext } = getPackagesPath());
     } else {
