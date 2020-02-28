@@ -90,12 +90,13 @@ expect(distPath[0]).to.be.equal(`${__dirname}/dist`);
  * Gets packages path for a given project source root. It filters each path
  * returns only packages contain valid src/index and have package.json
  *
- * @param {string} dir packages main directory [path="./packages/*"]
+ * @param {string} [dir="./packages/*"]
+ *
  * @returns {Object[]} results
  * @returns {Array} results[].path valid path directory
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-const { path, ext } = getPackagesPath({ dir });
+const { path, ext } = getPackagesPath(dir);
 ```
 
 #### Example(3)
