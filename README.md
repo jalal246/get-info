@@ -22,17 +22,17 @@ can automatically read the current project directory whether it is
 ```js
 /**
  * Extracts package json, extension, and resolved distention path for each given
- * path.
+ * name.
  *
  * @param {string} [buildName="dist"]
- * @param {string} packagesName contain names of required packages in repo.
+ * @param {string} packagesNames contain names of required packages in repo.
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given package-name
  * @returns {Array} results[].ext - extension (js|ts) related to every package-name
  * @returns {Array} results[].distPath - resolved distention path for every package-name
  */
-const { json, ext, distPath } = getJsonByName(buildName)(...packagesName);
+const { json, ext, distPath } = getJsonByName(buildName)(...packagesNames);
 ```
 
 #### Example(1)
