@@ -185,7 +185,7 @@ const { path, ext } = filterPathAccess(pkgPath);
 
 - [corename](https://github.com/jalal246/corename) - Extracts package name.
 
-- [move-position](https://github.com/jalal246/move-position) - Move element
+- [move-position](https://github.com/jalal246/move-position) - Moves element
   index in an array.
 
 ## Tests
