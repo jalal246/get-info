@@ -54,12 +54,12 @@ function byName(names) {
  * @param {string} buildName
  * @returns {function}
  */
-function getJsonByName(buildName, path) {
+function getJsonByName(buildName, ...paths) {
   return function(...defaultNames) {
     /**
      * extract json form each package.
      */
-    ({ json, ext, distPath } = getJsonByPath(buildName)(...path));
+    ({ json, ext, distPath } = getJsonByPath(buildName)(...paths));
 
     if (defaultNames.length === 0) {
       msg(`Getting all packages`);
