@@ -26,7 +26,7 @@ can automatically read the current project directory whether it is
  *
  * @param {string} [buildName="dist"]
  * @param {string} paths contain paths to resolve and extracts info from
- * @param {string} names contain packages names in repo.
+ * @param {string} names contain package names in repo.
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given package-name
