@@ -52,14 +52,15 @@ function byName(names) {
  * Wrapper function inits json, ext, distPath and buildName.
  *
  * @param {string} buildName
+ * @param {string} paths
  * @returns {function}
  */
-function getJsonByName(buildName) {
+function getJsonByName(buildName, ...paths) {
   return function(...defaultNames) {
     /**
      * extract json form each package.
      */
-    ({ json, ext, distPath } = getJsonByPath(buildName)());
+    ({ json, ext, distPath } = getJsonByPath(buildName)(...paths));
 
     if (defaultNames.length === 0) {
       msg(`Getting all packages`);

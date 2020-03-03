@@ -25,14 +25,16 @@ can automatically read the current project directory whether it is
  * name.
  *
  * @param {string} [buildName="dist"]
- * @param {string} packagesNames contain names of required packages in repo.
+ * @param {string} paths contain paths to resolve and extracts info from
+ * @param {string} names contain package names in repo.
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given package-name
  * @returns {Array} results[].ext - extension (js|ts) related to every package-name
  * @returns {Array} results[].distPath - resolved distention path for every package-name
  */
-const { json, ext, distPath } = getJsonByName(buildName)(...packagesNames);
+
+const { json, ext, distPath } = getJsonByName(buildName, ...path)(...names);
 ```
 
 #### Example(1)
@@ -184,6 +186,9 @@ const { path, ext } = filterPathAccess(pkgPath);
 - [builderz](https://github.com/jalal246/builderz) - Building your project with zero config.
 
 - [corename](https://github.com/jalal246/corename) - Extracts package name.
+
+- [move-position](https://github.com/jalal246/move-position) - Moves element
+  index in an array.
 
 ## Tests
 
