@@ -52,6 +52,7 @@ function byName(names) {
  * Wrapper function inits json, ext, distPath and buildName.
  *
  * @param {string} buildName
+ * @param {string} paths
  * @returns {function}
  */
 function getJsonByName(buildName, ...paths) {
