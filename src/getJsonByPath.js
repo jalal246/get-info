@@ -18,12 +18,10 @@ let ext = [];
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Array} results[].ext - extension (js|ts) related to every path
- * @returns {Array} results[].distPath - resolved distention path for every path
+ * @returns {Object} results[].pkgInfo - {dist, ext}
  */
 function byPath(defaultPaths) {
-  const filteredExt = [];
-  const distPath = [];
+  const pkgInfo = {};
 
   const packagesJson = defaultPaths.map((pkgPath, i) => {
     const pkgJson = resolve(pkgPath, "package.json");
@@ -41,9 +39,13 @@ function byPath(defaultPaths) {
 
       const dist = resolve(pkgPath, buildName);
 
-      distPath.push(dist);
-
-      filteredExt.push(pkgExt);
+      /**
+       * Add extracted extra info to pkgInfo and keep pkgJson as it is.
+       */
+      pkgInfo[name] = {
+        dist,
+        ext
+      };
 
       return {
         sourcePath,
@@ -62,7 +64,7 @@ function byPath(defaultPaths) {
 
   success(`> Done extracting ${filteredPkgJson.length} packages json`);
 
-  return { json: filteredPkgJson, ext: filteredExt, distPath };
+  return { json: filteredPkgJson, pkgInfo };
 }
 
 /**
