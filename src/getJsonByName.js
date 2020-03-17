@@ -20,7 +20,7 @@ let distPath;
 function byName(names) {
   const filteredExt = [];
   const filteredJson = [];
-  const filteredDistPath = [];
+  const filteredDistPath = {};
 
   names.forEach(packageName => {
     for (let j = 0; j < json.length; j += 1) {
@@ -29,7 +29,8 @@ function byName(names) {
       if (name.includes(packageName)) {
         filteredJson.push(json[j]);
         filteredExt.push(ext[j]);
-        filteredDistPath.push(distPath[j]);
+        filteredDistPath[name] = distPath[j];
+        console.log("byName -> filteredDistPath", filteredDistPath);
 
         // remove element from array so we don't check it again.
         json.splice(j, 1);
