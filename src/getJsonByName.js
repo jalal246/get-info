@@ -4,8 +4,7 @@ const { msg, success } = require("@mytools/print");
 const getJsonByPath = require("./getJsonByPath");
 
 let json;
-let ext;
-let distPath;
+let pkgInfo;
 
 /**
  * Extracts package json, extension, and resolved distention path for each given
@@ -15,12 +14,11 @@ let distPath;
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Array} results[].ext - extension (js|ts) related to every path
+ * @returns {Object} results[].pkgInfo - {dist, ext}
  */
 function byName(names) {
-  const filteredExt = [];
   const filteredJson = [];
-  const filteredDistPath = {};
+  const filteredPkgInfo = {};
 
   names.forEach(packageName => {
     for (let j = 0; j < json.length; j += 1) {
@@ -28,9 +26,11 @@ function byName(names) {
 
       if (name.includes(packageName)) {
         filteredJson.push(json[j]);
-        filteredExt.push(ext[j]);
-        filteredDistPath[name] = distPath[j];
-        console.log("byName -> filteredDistPath", filteredDistPath);
+
+        /**
+         * Add extracted extra info to pkgInfo and keep pkgJson as it is.
+         */
+        filteredPkgInfo[name] = pkgInfo[name];
 
         // remove element from array so we don't check it again.
         json.splice(j, 1);
@@ -44,8 +44,7 @@ function byName(names) {
 
   return {
     json: filteredJson,
-    ext: filteredExt,
-    distPath: filteredDistPath
+    pkgInfo: filteredPkgInfo
   };
 }
 
@@ -61,15 +60,14 @@ function getJsonByName(buildName, ...paths) {
     /**
      * extract json form each package.
      */
-    ({ json, ext, distPath } = getJsonByPath(buildName)(...paths));
+    ({ json, pkgInfo } = getJsonByPath(buildName)(...paths));
 
     if (defaultNames.length === 0) {
       msg(`Getting all packages`);
 
       return {
         json,
-        ext,
-        distPath
+        pkgInfo
       };
     }
 
