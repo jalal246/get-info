@@ -30,11 +30,10 @@ can automatically read the current project directory whether it is
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given package-name
- * @returns {Array} results[].ext - extension (js|ts) related to every package-name
- * @returns {Array} results[].distPath - resolved distention path for every package-name
+ * @returns {Object} results[].pkgInfo - {dist, ext}
  */
 
-const { json, ext, distPath } = getJsonByName(buildName, ...path)(...names);
+const { json, pkgInfo } = getJsonByName(buildName, ...path)(...names);
 ```
 
 #### Example(1)
@@ -42,14 +41,14 @@ const { json, ext, distPath } = getJsonByName(buildName, ...path)(...names);
 ```js
 import { getJsonByName } from "get-info";
 
-const { ext, json, path } = getJsonByName()("myFav/project another/project");
+const { json, pkgInfo } = getJsonByName()("myFav/project another/project");
 
-expect(json).to.be.an("Array");
-
-expect(json.length).to.be.equal(2);
-
-expect(json[0].name).to.be.equal("@myFav/project");
-expect(json[1].name).to.be.equal("@another/project");
+// json>> [{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
+//
+// pkgInfo>> {@myFav/project, ...}
+//
+// pkgInfo[@myFav/project]>> {ext: js, dist: "root/**/myFav-project/dist/"}
+//
 ```
 
 ### getJsonByPath
@@ -64,10 +63,9 @@ expect(json[1].name).to.be.equal("@another/project");
  *
  * @returns {Object[]} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Array} results[].ext - extension (js|ts) related to every path
- * @returns {Array} results[].distPath - resolved distention path for every path
+ * @returns {Object} results[].pkgInfo - {dist, ext}
  */
-const { json, ext, distPath } = getJsonByPath(buildName)(...paths);
+const { json, pkgInfo } = getJsonByPath(buildName)(...paths);
 ```
 
 #### Example(2)
@@ -75,14 +73,13 @@ const { json, ext, distPath } = getJsonByPath(buildName)(...paths);
 ```js
 import { getJsonByPath } from "get-info";
 
-const { json, ext, distPath } = getJsonByPath()();
+const { json, pkgInfo } = getJsonByPath()();
 
-expect(json).to.be.an("Array");
-expect(json.length).to.be.equal(1);
-
-expect(json[0].name).to.be.equal("get-info");
-expect(ext[0]).to.be.equal("js");
-expect(distPath[0]).to.be.equal(`${__dirname}/dist`);
+// json>> [{name: get-info, version: "1.1.1", main: "index.js", ...}]
+//
+// pkgInfo>> {get-info}
+//
+// pkgInfo[get-info]>> {ext: js, dist: "root/**/get-info/dist/"}
 ```
 
 ### getPackagesPath
@@ -189,6 +186,8 @@ const { path, ext } = filterPathAccess(pkgPath);
 
 - [move-position](https://github.com/jalal246/move-position) - Moves element
   index in an array.
+
+- [textics](https://github.com/jalal246/textics) & [textics-stream](https://github.com/jalal246/textics-stream) - Counts lines, words, chars and spaces for a given string.
 
 ## Tests
 
