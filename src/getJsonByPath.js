@@ -44,7 +44,7 @@ function byPath(defaultPaths) {
        */
       pkgInfo[name] = {
         dist,
-        ext
+        ext: pkgExt
       };
 
       return {
