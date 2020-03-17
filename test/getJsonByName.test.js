@@ -1,20 +1,16 @@
 const { expect } = require("chai");
 const { getJsonByName, getPackagesPath, setIsSilent } = require("../src");
 
-describe("getJsonByName", () => {
+describe.only("getJsonByName", () => {
   setIsSilent(true);
   it("Default: gets current path with ext and json", () => {
-    const { ext, json, distPath } = getJsonByName()();
+    const { json, pkgInfo } = getJsonByName()();
 
     expect(json).to.be.an("Array");
-    expect(ext).to.be.an("Array");
-    expect(distPath).to.be.an("Array");
+    expect(pkgInfo).to.be.an("Object");
 
     expect(json.length).to.be.equal(1);
-    expect(ext.length).to.be.equal(1);
-    expect(distPath.length).to.be.equal(1);
 
-    expect(ext[0]).to.be.equal("js");
     expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
@@ -22,6 +18,12 @@ describe("getJsonByName", () => {
      * By default, will read the project scr and package json.
      */
     expect(json[0].name).to.be.equal("get-info");
+    const { name } = json[0];
+
+    const { dist, ext } = pkgInfo[name];
+
+    expect(dist).to.be.an("string");
+    expect(ext).to.be.equal("js");
   });
 
   it("gets array of json with default path", () => {
