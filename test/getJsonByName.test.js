@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { getJsonByName, getPackagesPath, setIsSilent } = require("../src");
 
-describe.only("getJsonByName", () => {
+describe("getJsonByName", () => {
   setIsSilent(true);
   it("Default: gets current path with ext and json", () => {
     const { json, pkgInfo } = getJsonByName()();

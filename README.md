@@ -48,7 +48,6 @@ const { json, pkgInfo } = getJsonByName()("myFav/project another/project");
 // pkgInfo>> {@myFav/project, ...}
 //
 // pkgInfo[@myFav/project]>> {ext: js, dist: "root/**/myFav-project/dist/"}
-//
 ```
 
 ### getJsonByPath
@@ -105,16 +104,13 @@ import { getPackagesPath } from "get-info";
 
 const { path, ext } = getPackagesPath();
 
-const expectedPaths = [
-  "./packages/myProj1",
-  "./packages/myProj2",
-  "./packages/myProj3"
-];
+// path>> [
+//   "./packages/myProj1",
+//   "./packages/myProj2",
+//   "./packages/myProj3"
+// ];
 
-const expectedExtensions = ["js", "ts", "ts"];
-
-expect(path).to.deep.equal(expectedPaths);
-expect(ext).to.deep.equal(expectedExtensions);
+// ext>> ["js", "ts", "ts"];
 ```
 
 ### Utils
