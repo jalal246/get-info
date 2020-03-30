@@ -1,11 +1,13 @@
 # get-info
 
-> Utility functions deal with files in your project. Make production easier :mag_right:
+> Utility functions deal with files in your project. Make production easier & faster :mag_right:
 
-`get-info` Contains a bunch od functions read packages in root project,
+`get-info` Contains a bunch of functions that read packages in root project,
 validate each package, return the path, JSON, and extension(js|ts) used for each
-one. As it is essentially created to deal with monorepos, it works as well for a
-single package project.
+one.
+
+These functions are essential to deal with monorepos `packages/**/src`, and it works as well for a
+single package project `./src`.
 
 ```bash
 npm install get-info
@@ -13,27 +15,22 @@ npm install get-info
 
 ## API
 
-If not passed path or ext (more likely you don't need to), then all functions
-can automatically read the current project directory whether it is
-`packages/**/src` or `./src`
-
 ### getJsonByName
+
+Extracts package json, extension, and resolved source path for each given name.
+If `names` not passed, it returns all packages json can be found in `packages/**/package.json`
+or `./package.json`
 
 ```js
 /**
- * Extracts package json, extension, and resolved distention path for each given
- * name.
  *
- * @param {string} [buildName="dist"]
- * @param {string} paths contain paths to resolve and extracts info from
- * @param {string} names contain package names in repo.
+ * @param {string} names required packages name
  *
- * @returns {Object[]} results
- * @returns {Array} results[].json - packages json related to given package-name
- * @returns {Object} results[].pkgInfo - {dist, ext}
+ * @returns {Object} results
+ * @returns {Array} results[].json - packages json related to given path
+ * @returns {Object} results[].pkgInfo - {ext, srcPath}
  */
-
-const { json, pkgInfo } = getJsonByName(buildName, ...path)(...names);
+const { json, pkgInfo } = getJsonByName(...names);
 ```
 
 #### Example(1)
@@ -41,30 +38,31 @@ const { json, pkgInfo } = getJsonByName(buildName, ...path)(...names);
 ```js
 import { getJsonByName } from "get-info";
 
-const { json, pkgInfo } = getJsonByName()("myFav/project another/project");
+const { json, pkgInfo } = getJsonByName("myFav/project another/project");
 
-// json>> [{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
-//
-// pkgInfo>> {@myFav/project, ...}
-//
-// pkgInfo[@myFav/project]>> {ext: js, dist: "root/**/myFav-project/dist/"}
+// json [{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
+
+// pkgInfo {@myFav/project, ...}
+
+// pkgInfo[@myFav/project] {ext: js, srcPath: "root/**/myFav-project/src/index.js"}
 ```
 
 ### getJsonByPath
 
+Extracts package json, extension, and resolved source path for each given path.
+If `paths` not passed, it returns all packages json can be found in `packages/**/package.json`
+or `./package.json`
+
 ```js
 /**
- * Extracts package json, extension, and resolved distention path for each given
- * path.
  *
- * @param {string} [buildName="dist"]
- * @param {string} paths contain paths to resolve and extracts info from
+ * @param {sting} paths  contains paths to resolve and extracts info form.
  *
- * @returns {Object[]} results
+ * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {dist, ext}
+ * @returns {Object} results[].pkgInfo - {ext, srcPath}
  */
-const { json, pkgInfo } = getJsonByPath(buildName)(...paths);
+const { json, pkgInfo } = getJsonByPath(...paths);
 ```
 
 #### Example(2)
@@ -72,21 +70,22 @@ const { json, pkgInfo } = getJsonByPath(buildName)(...paths);
 ```js
 import { getJsonByPath } from "get-info";
 
-const { json, pkgInfo } = getJsonByPath()();
+const { json, pkgInfo } = getJsonByPath("../path");
 
-// json>> [{name: get-info, version: "1.1.1", main: "index.js", ...}]
-//
-// pkgInfo>> {get-info}
-//
-// pkgInfo[get-info]>> {ext: js, dist: "root/**/get-info/dist/"}
+// json [{name: get-info, version: "1.1.1", main: "index.js", ...}]
+
+// pkgInfo {get-info}
+
+// pkgInfo[get-info] {ext: js, srcPath: "path/src/index.js"}
 ```
 
 ### getPackagesPath
 
+Scan root directory returns all project in there. It filters each path returns
+only packages contain valid `src/index` and have `package.json`
+
 ```js
 /**
- * Gets packages path for a given project source root. It filters each path
- * returns only packages contain valid src/index and have package.json
  *
  * @param {string} [dir="./packages/*"]
  *
@@ -104,13 +103,13 @@ import { getPackagesPath } from "get-info";
 
 const { path, ext } = getPackagesPath();
 
-// path>> [
+// path [
 //   "./packages/myProj1",
 //   "./packages/myProj2",
 //   "./packages/myProj3"
 // ];
 
-// ext>> ["js", "ts", "ts"];
+// ext ["js", "ts", "ts"];
 ```
 
 ### Utils
@@ -119,12 +118,12 @@ Utility functions used in this project are also exported for further use.
 
 #### utils.getFileExtension
 
+Gets extension used for `project/**/src/**`
+
 ```js
 import { utils } from "get-info";
 
 /**
- * Loop inside a given directory looking for index. When find it, gets its
- * extension.
  *
  * @param {string} dir - given directory
  * @returns {string} extension.
@@ -135,12 +134,13 @@ const extension = getFileExtension(dir);
 
 #### utils.validateAccess
 
+Validates access readability for `package.json` & `src`.
+
 ```js
 import { utils } from "get-info";
 const { validateAccess } = utils;
 
 /**
- * Validates access readability `package.json` & `src` for given path.
  *
  * @param {string} [dir="."]
  * @param {string} [ext=getFileExtension(dir/src)]
@@ -155,13 +155,13 @@ const { isValid, ext } = validateAccess(dir, ext, srcName);
 
 #### utils.filterPathAccess
 
+Filters array of paths by validate each path. Make sure it has `package.json` and `src`.
+
 ```js
 import { utils } from "get-info";
 const { filterPathAccess } = utils;
 
 /**
- * Filters array of paths by validate each path. Makes sure it has
- * `package.json` and `src`.
  *
  * @param {Array} [pkgPath=[]]
  * @returns {Object} results[]
@@ -176,7 +176,7 @@ const { path, ext } = filterPathAccess(pkgPath);
 - [packageSorter](https://github.com/jalal246/packageSorter) - Sorting packages
   for monorepos production.
 
-- [builderz](https://github.com/jalal246/builderz) - Building your project with zero config.
+- [builderz](https://github.com/jalal246/builderz) - Build your project(s) with zero configuration
 
 - [corename](https://github.com/jalal246/corename) - Extracts package name.
 
