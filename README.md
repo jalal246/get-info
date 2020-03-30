@@ -3,10 +3,9 @@
 > Utility functions deal with files in your project. Make production easier & faster :mag_right:
 
 `get-info` Contains a bunch of functions that read packages in root project,
-validate each package, return the path, JSON, and extension(js|ts) used for each
-one.
+validate each one, return the path, JSON, and used extension(js|ts) .
 
-These functions are essential to deal with monorepos `packages/**/src`, and it works as well for a
+These functions are essential to deal with monorepos `./packages/**/src`, and it works as well for a
 single package project `./src`.
 
 ```bash
@@ -18,7 +17,7 @@ npm install get-info
 ### getJsonByName
 
 Extracts package json, extension, and resolved source path for each given name.
-If `names` not passed, it returns all packages json can be found in `packages/**/package.json`
+If `names` are not passed, it returns all json objects can be found in `./packages/**/package.json`
 or `./package.json`
 
 ```js
@@ -38,11 +37,9 @@ const { json, pkgInfo } = getJsonByName(...names);
 ```js
 import { getJsonByName } from "get-info";
 
-const { json, pkgInfo } = getJsonByName("myFav/project another/project");
+const { json, pkgInfo } = getJsonByName("myFav/project", "another/project");
 
 // json [{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
-
-// pkgInfo {@myFav/project, ...}
 
 // pkgInfo[@myFav/project] {ext: js, srcPath: "root/**/myFav-project/src/index.js"}
 ```
@@ -50,7 +47,7 @@ const { json, pkgInfo } = getJsonByName("myFav/project another/project");
 ### getJsonByPath
 
 Extracts package json, extension, and resolved source path for each given path.
-If `paths` not passed, it returns all packages json can be found in `packages/**/package.json`
+If `paths` are not passed, it returns all json objects can be found in `./packages/**/package.json`
 or `./package.json`
 
 ```js
@@ -70,19 +67,17 @@ const { json, pkgInfo } = getJsonByPath(...paths);
 ```js
 import { getJsonByPath } from "get-info";
 
-const { json, pkgInfo } = getJsonByPath("../path");
+const { json, pkgInfo } = getJsonByPath("./myProject");
 
-// json [{name: get-info, version: "1.1.1", main: "index.js", ...}]
+// json [{name: myProject, version: "1.1.1", main: "index.js", ...}]
 
-// pkgInfo {get-info}
-
-// pkgInfo[get-info] {ext: js, srcPath: "path/src/index.js"}
+// pkgInfo[myProject] {ext: js, srcPath: "myProject/src/index.js"}
 ```
 
 ### getPackagesPath
 
-Scan root directory returns all project in there. It filters each path returns
-only packages contain valid `src/index` and have `package.json`
+It scans root directory, returns all project in there. It filters each path returns
+only packages contain valid `src/index[ext]` and have `package.json`
 
 ```js
 /**
@@ -112,9 +107,7 @@ const { path, ext } = getPackagesPath();
 // ext ["js", "ts", "ts"];
 ```
 
-### Utils
-
-Utility functions used in this project are also exported for further use.
+### Utils: functions used in this project exported for further use
 
 #### utils.getFileExtension
 
@@ -155,7 +148,7 @@ const { isValid, ext } = validateAccess(dir, ext, srcName);
 
 #### utils.filterPathAccess
 
-Filters array of paths by validate each path. Make sure it has `package.json` and `src`.
+Filters array of paths by validate each path. Make sure it has `package.json` & `src`.
 
 ```js
 import { utils } from "get-info";
