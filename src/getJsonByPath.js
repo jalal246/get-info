@@ -7,9 +7,6 @@ const getPackagesPath = require("./getPackagesPath");
 
 const { getFileExtension } = require("./utils");
 
-let buildName;
-let ext = [];
-
 /**
  * Extracts package json, extension, and resolved distention path for each given
  * path.
@@ -20,10 +17,21 @@ let ext = [];
  * @returns {Array} results[].json - packages json related to given path
  * @returns {Object} results[].pkgInfo - {dist, ext}
  */
-function byPath(defaultPaths) {
+function getJsonByPath(...defaultPaths) {
+  let ext = [];
+  let foundPaths;
+
+  if (defaultPaths.length === 0) {
+    msg(`Getting all paths`);
+
+    ({ path: foundPaths, ext } = getPackagesPath());
+  } else {
+    foundPaths = defaultPaths;
+  }
+
   const pkgInfo = {};
 
-  const packagesJson = defaultPaths.map((pkgPath, i) => {
+  const packagesJson = foundPaths.map((pkgPath, i) => {
     const pkgJson = resolve(pkgPath, "package.json");
 
     try {
@@ -35,20 +43,17 @@ function byPath(defaultPaths) {
 
       const pkgExt = ext[i] || getFileExtension(resolve(pkgPath, "src"));
 
-      const sourcePath = resolve(pkgPath, "src", `index.${pkgExt}`);
-
-      const dist = resolve(pkgPath, buildName);
+      const srcPath = resolve(pkgPath, "src", `index.${pkgExt}`);
 
       /**
        * Add extracted extra info to pkgInfo and keep pkgJson as it is.
        */
       pkgInfo[name] = {
-        dist,
-        ext: pkgExt
+        ext: pkgExt,
+        srcPath
       };
 
       return {
-        sourcePath,
         name,
         peerDependencies,
         dependencies,
@@ -65,30 +70,6 @@ function byPath(defaultPaths) {
   success(`> Done extracting ${filteredPkgJson.length} packages json`);
 
   return { json: filteredPkgJson, pkgInfo };
-}
-
-/**
- * Wrapper function inits paths, ext and build name.
- *
- * @param {string} bName -buildName
- * @returns {function}
- */
-function getJsonByPath(bName) {
-  buildName = bName || "dist";
-
-  return function(...defaultPaths) {
-    let path;
-
-    if (defaultPaths.length === 0) {
-      msg(`Getting all paths`);
-
-      ({ path, ext } = getPackagesPath());
-    } else {
-      path = defaultPaths;
-    }
-
-    return byPath(path);
-  };
 }
 
 module.exports = getJsonByPath;
