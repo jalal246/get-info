@@ -1,13 +1,11 @@
 /* eslint-disable func-names */
-const { msg, success } = require("@mytools/print");
-
 const getJsonByPath = require("./getJsonByPath");
 
 /**
- * Extracts package json, extension, and resolved distention path for each given
- * packages name.
+ * Extracts package json, extension, and resolved source path for each given
+ * name.
  *
- * @param {Array} names required packages name
+ * @param {string} names required packages name
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
@@ -20,7 +18,7 @@ function getJsonByName(...names) {
   const { json, pkgInfo } = getJsonByPath();
 
   if (names.length === 0) {
-    msg(`Getting all packages`);
+    // msg(`Getting all packages`);
 
     return {
       json,
@@ -51,7 +49,7 @@ function getJsonByName(...names) {
     }
   });
 
-  success(`> Done finding ${filteredJson.length} packages`);
+  // success(`> Done finding ${filteredJson.length} packages`);
 
   return {
     json: filteredJson,

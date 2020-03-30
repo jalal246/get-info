@@ -1,5 +1,5 @@
+/* eslint-disable no-console */
 /* eslint-disable func-names */
-const { msg, success, error } = require("@mytools/print");
 const { resolve } = require("path");
 const fs = require("fs");
 
@@ -8,10 +8,10 @@ const getPackagesPath = require("./getPackagesPath");
 const { getFileExtension } = require("./utils");
 
 /**
- * Extracts package json, extension, and resolved distention path for each given
+ * Extracts package json, extension, and resolved source path for each given
  * path.
  *
- * @param {Array} defaultPaths  contains paths to resolve and extracts info form.
+ * @param {sting} defaultPaths  contains paths to resolve and extracts info form.
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
@@ -22,7 +22,7 @@ function getJsonByPath(...defaultPaths) {
   let foundPaths;
 
   if (defaultPaths.length === 0) {
-    msg(`Getting all paths`);
+    // msg(`Getting all paths`);
 
     ({ path: foundPaths, ext } = getPackagesPath());
   } else {
@@ -60,14 +60,14 @@ function getJsonByPath(...defaultPaths) {
         ...other
       };
     } catch (e) {
-      error(`${e}`);
+      console.error(`${e}`);
       return false;
     }
   });
 
   const filteredPkgJson = packagesJson.filter(Boolean);
 
-  success(`> Done extracting ${filteredPkgJson.length} packages json`);
+  // success(`> Done extracting ${filteredPkgJson.length} packages json`);
 
   return { json: filteredPkgJson, pkgInfo };
 }

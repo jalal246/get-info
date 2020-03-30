@@ -1,7 +1,6 @@
+/* eslint-disable no-console */
 const fs = require("fs");
 const { resolve } = require("path");
-
-const { warning, error } = require("@mytools/print");
 
 /**
  * Loop inside a given directory looking for index. When finds it, gets its
@@ -18,7 +17,9 @@ function getFileExtension(dir) {
   });
 
   if (!indx) {
-    error(`getFileExtension: Unable to detect extension. Can't find src/index`);
+    console.error(
+      `getFileExtension: Unable to detect extension. Can't find src/index`
+    );
   }
   const extension = indx.split(".").pop();
 
@@ -50,8 +51,8 @@ function validateAccess(dir = ".", ext, srcName = "src") {
     fileExt = ext || getFileExtension(src);
     const fullSrc = resolve(src, `index.${fileExt}`);
     fs.accessSync(fullSrc, fs.constants.R_OK);
-  } catch (e) {
-    warning(e);
+  } catch (err) {
+    console.info(err);
 
     isValid = false;
   }
