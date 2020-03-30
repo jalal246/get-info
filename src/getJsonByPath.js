@@ -13,9 +13,9 @@ const { getFileExtension } = require("./utils");
  *
  * @param {Array} defaultPaths  contains paths to resolve and extracts info form.
  *
- * @returns {Object[]} results
+ * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {dist, ext}
+ * @returns {Object} results[].pkgInfo - {ext, srcPath}
  */
 function getJsonByPath(...defaultPaths) {
   let ext = [];
