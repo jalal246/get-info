@@ -1,9 +1,8 @@
 const { expect } = require("chai");
 
-const { getPackagesPath, setIsSilent } = require("../src");
+const { getPackagesPath } = require("../src");
 
 describe("getPackagesPath", () => {
-  setIsSilent(true);
   it("Default: gets root path", () => {
     const { path, ext } = getPackagesPath();
 

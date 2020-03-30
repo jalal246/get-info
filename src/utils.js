@@ -52,8 +52,6 @@ function validateAccess(dir = ".", ext, srcName = "src") {
     const fullSrc = resolve(src, `index.${fileExt}`);
     fs.accessSync(fullSrc, fs.constants.R_OK);
   } catch (err) {
-    console.info(err);
-
     isValid = false;
   }
 

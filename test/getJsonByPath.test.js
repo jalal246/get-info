@@ -1,9 +1,8 @@
 const { expect } = require("chai");
 
-const { getPackagesPath, getJsonByPath, setIsSilent } = require("../src");
+const { getPackagesPath, getJsonByPath } = require("../src");
 
 describe("getJsonByPath", () => {
-  setIsSilent(true);
   it("Default: Checks if monorepo or not and gets the json info", () => {
     const { json, pkgInfo } = getJsonByPath();
 

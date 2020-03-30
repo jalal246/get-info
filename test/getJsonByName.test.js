@@ -1,9 +1,7 @@
 const { expect } = require("chai");
-const { getJsonByName, setIsSilent } = require("../src");
+const { getJsonByName } = require("../src");
 
 describe("getJsonByName", () => {
-  setIsSilent(true);
-
   it("Default: gets current path with ext and json", () => {
     const { json, pkgInfo } = getJsonByName();
 
