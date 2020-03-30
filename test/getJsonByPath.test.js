@@ -5,13 +5,12 @@ const { getPackagesPath, getJsonByPath, setIsSilent } = require("../src");
 describe("getJsonByPath", () => {
   setIsSilent(true);
   it("Default: Checks if monorepo or not and gets the json info", () => {
-    const { json, pkgInfo } = getJsonByPath()();
+    const { json, pkgInfo } = getJsonByPath();
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(1);
 
     expect(json[0]).to.have.own.property("name");
-    expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
     /**
@@ -19,47 +18,46 @@ describe("getJsonByPath", () => {
      */
     const { name } = json[0];
 
-    const { dist, ext } = pkgInfo[name];
+    const { srcPath, ext } = pkgInfo[name];
 
-    expect(dist).to.be.an("string");
+    expect(srcPath).to.be.an("string");
     expect(ext).to.be.equal("js");
   });
 
   it("returns all packages for given path", () => {
     const { path } = getPackagesPath("./test/packages-valid/*");
 
-    const { json } = getJsonByPath()(...path);
+    const { json, pkgInfo } = getJsonByPath(...path);
 
     expect(json.length).to.be.equal(5);
 
     expect(json[0]).to.have.own.property("name");
-    expect(json[0]).to.have.own.property("sourcePath");
     expect(json[0]).to.have.own.property("dependencies");
 
-    expect(json[0].name).to.be.equal("@folo/forms");
+    const { name } = json[0];
+
+    const { srcPath, ext } = pkgInfo[name];
+
+    expect(name).to.be.equal("@folo/forms");
+    expect(srcPath).to.be.an("string");
+    expect(ext).to.be.equal("js");
   });
 
   it("filters unfiltered paths then get packages Json for each", () => {
     const { path } = getPackagesPath("./test/packages-invalid/*");
 
-    const { json, pkgInfo } = getJsonByPath()(...path);
+    const { json, pkgInfo } = getJsonByPath(...path);
 
     expect(json.length).to.be.equal(1);
 
-    expect(json[0]).to.have.own.property("name");
-    expect(json[0]).to.have.own.property("sourcePath");
-    expect(json[0]).to.have.own.property("dependencies");
+    const { name, dependencies } = json[0];
 
-    expect(json[0].name).to.be.equal("@folo/forms");
+    expect(name).to.be.equal("@folo/forms");
+    expect(dependencies).to.be.an("Object");
 
-    /**
-     * By default, will read the project scr and package json.
-     */
-    const { name } = json[0];
+    const { srcPath, ext } = pkgInfo[name];
 
-    const { dist, ext } = pkgInfo[name];
-
-    expect(dist).to.be.an("string");
+    expect(srcPath).to.be.an("string");
     expect(ext).to.be.equal("js");
   });
 });
