@@ -20,9 +20,9 @@ describe("getJsonByName", () => {
     expect(name).to.be.equal("get-info");
     expect(dependencies).to.be.an("Object");
 
-    const { srcPath, ext } = pkgInfo[name];
+    const { path, ext } = pkgInfo[name];
 
-    expect(srcPath).to.be.an("string");
+    expect(path).to.be.an("string");
     expect(ext).to.be.equal("js");
   });
 

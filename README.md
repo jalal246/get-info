@@ -1,9 +1,9 @@
 # get-info
 
-> Utility functions deal with files in your project. Make production easier & faster :mag_right:
+> Utility functions extract project(s) information. Make production easier & faster :mag_right:
 
-`get-info` Contains a bunch of functions that read packages in root project,
-validate each one, return the path, JSON, and used extension(js|ts) .
+`get-info` Contains functions that read packages, validate
+readability, return path, JSON, and used extension(js|ts) for each package found in workspace.
 
 These functions are essential to deal with monorepos `./packages/**/src`, and it works as well for a
 single package project `./src`.
@@ -16,7 +16,7 @@ npm install get-info
 
 ### getJsonByName
 
-Extracts package json, extension, and resolved path for each given name. If
+Extracts package json, extension, and resolved path for each project name. If
 `names` are not passed, it returns all json objects can be found in
 `./packages/**/package.json` or `./package json`
 
@@ -86,7 +86,7 @@ pkgInfo[myProject]
 
 ### getPackagesPath
 
-It scans root directory, returns all project in there. It filters each path returns
+Scans root directory (workspace), returns all project in there. It filters each path returns
 only packages contain valid `src/index[ext]` and have `package.json`
 
 ```js

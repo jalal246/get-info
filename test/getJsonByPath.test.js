@@ -17,9 +17,9 @@ describe("getJsonByPath", () => {
      */
     const { name } = json[0];
 
-    const { srcPath, ext } = pkgInfo[name];
+    const { path, ext } = pkgInfo[name];
 
-    expect(srcPath).to.be.an("string");
+    expect(path).to.be.an("string");
     expect(ext).to.be.equal("js");
   });
 
@@ -35,10 +35,10 @@ describe("getJsonByPath", () => {
 
     const { name } = json[0];
 
-    const { srcPath, ext } = pkgInfo[name];
+    const { path: pkgPath, ext } = pkgInfo[name];
 
     expect(name).to.be.equal("@folo/forms");
-    expect(srcPath).to.be.an("string");
+    expect(pkgPath).to.be.an("string");
     expect(ext).to.be.equal("js");
   });
 
@@ -54,9 +54,9 @@ describe("getJsonByPath", () => {
     expect(name).to.be.equal("@folo/forms");
     expect(dependencies).to.be.an("Object");
 
-    const { srcPath, ext } = pkgInfo[name];
+    const { path: pkgPath, ext } = pkgInfo[name];
 
-    expect(srcPath).to.be.an("string");
+    expect(pkgPath).to.be.an("string");
     expect(ext).to.be.equal("js");
   });
 });
