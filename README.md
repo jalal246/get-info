@@ -16,9 +16,9 @@ npm install get-info
 
 ### getJsonByName
 
-Extracts package json, extension, and resolved source path for each given name.
-If `names` are not passed, it returns all json objects can be found in `./packages/**/package.json`
-or `./package.json`
+Extracts package json, extension, and resolved path for each given name. If
+`names` are not passed, it returns all json objects can be found in
+`./packages/**/package.json` or `./package json`
 
 ```js
 /**
@@ -27,7 +27,7 @@ or `./package.json`
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, srcPath}
+ * @returns {Object} results[].pkgInfo - {ext, path}
  */
 const { json, pkgInfo } = getJsonByName(...names);
 ```
@@ -39,16 +39,24 @@ import { getJsonByName } from "get-info";
 
 const { json, pkgInfo } = getJsonByName("myFav/project", "another/project");
 
-// json [{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
+json
+//[{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
 
-// pkgInfo[@myFav/project] {ext: js, srcPath: "root/**/myFav-project/src/index.js"}
+pkgInfo[@myFav/project]
+// {ext: js, path: "./myFav-project"}
+
+const { ext, path } = pkgInfo["@myFav/project"]
+
+// to get default entry and resolved dist path:
+const srcPath = resolve(path, "src", `index.${ext}`);
+const buildPath = resolve(path, "dist");
 ```
 
 ### getJsonByPath
 
-Extracts package json, extension, and resolved source path for each given path.
-If `paths` are not passed, it returns all json objects can be found in `./packages/**/package.json`
-or `./package.json`
+Extracts package json, extension, and resolved path for each given path. If
+`paths` are not passed, it returns all json objects can be found in
+`./packages/**/package.json` or `./package.json`
 
 ```js
 /**
@@ -57,7 +65,7 @@ or `./package.json`
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, srcPath}
+ * @returns {Object} results[].pkgInfo - {ext, path}
  */
 const { json, pkgInfo } = getJsonByPath(...paths);
 ```
@@ -69,9 +77,11 @@ import { getJsonByPath } from "get-info";
 
 const { json, pkgInfo } = getJsonByPath("./myProject");
 
-// json [{name: myProject, version: "1.1.1", main: "index.js", ...}]
+json
+// [{name: myProject, version: "1.1.1", main: "index.js", ...}]
 
-// pkgInfo[myProject] {ext: js, srcPath: "myProject/src/index.js"}
+pkgInfo[myProject]
+//  {ext: ts, path: "./myProject"}
 ```
 
 ### getPackagesPath
