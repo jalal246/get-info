@@ -1,6 +1,5 @@
+/* eslint-disable no-console */
 const glob = require("glob");
-
-const { success, error } = require("@mytools/print");
 
 const { validateAccess, filterPathAccess } = require("./utils");
 
@@ -31,7 +30,7 @@ function getPackagesPath(dir = "./packages/*") {
       path.push(".");
       ext.push(fileExt);
     } else {
-      error(
+      console.error(
         "getPackagesPath: Unable to read package form project root directory"
       );
     }
@@ -39,7 +38,7 @@ function getPackagesPath(dir = "./packages/*") {
     ({ path, ext } = filterPathAccess(path));
   }
 
-  success(`> Found ${path.length} packages `);
+  // success(`> Found ${path.length} packages `);
 
   return { path, ext };
 }

@@ -1,22 +1,31 @@
 /* eslint-disable func-names */
-const { msg, success } = require("@mytools/print");
-
 const getJsonByPath = require("./getJsonByPath");
 
-let json;
-let pkgInfo;
-
 /**
- * Extracts package json, extension, and resolved distention path for each given
- * packages name.
+ * Extracts package json, extension, and resolved source path for each given
+ * name.
  *
- * @param {Array} names required packages name
+ * @param {string} names required packages name
  *
- * @returns {Object[]} results
+ * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {dist, ext}
+ * @returns {Object} results[].pkgInfo - {ext, path}
  */
-function byName(names) {
+function getJsonByName(...names) {
+  /**
+   * extract all then filters it.
+   */
+  const { json, pkgInfo } = getJsonByPath();
+
+  if (names.length === 0) {
+    // msg(`Getting all packages`);
+
+    return {
+      json,
+      pkgInfo
+    };
+  }
+
   const filteredJson = [];
   const filteredPkgInfo = {};
 
@@ -40,38 +49,11 @@ function byName(names) {
     }
   });
 
-  success(`> Done finding ${filteredJson.length} packages`);
+  // success(`> Done finding ${filteredJson.length} packages`);
 
   return {
     json: filteredJson,
     pkgInfo: filteredPkgInfo
-  };
-}
-
-/**
- * Wrapper function inits json, ext, distPath and buildName.
- *
- * @param {string} buildName
- * @param {string} paths
- * @returns {function}
- */
-function getJsonByName(buildName, ...paths) {
-  return function(...defaultNames) {
-    /**
-     * extract json form each package.
-     */
-    ({ json, pkgInfo } = getJsonByPath(buildName)(...paths));
-
-    if (defaultNames.length === 0) {
-      msg(`Getting all packages`);
-
-      return {
-        json,
-        pkgInfo
-      };
-    }
-
-    return byName(defaultNames);
   };
 }
 
