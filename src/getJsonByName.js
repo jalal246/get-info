@@ -9,7 +9,7 @@ const getJsonByPath = require("./getJsonByPath");
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, srcPath}
+ * @returns {Object} results[].pkgInfo - {ext, path}
  */
 function getJsonByName(...names) {
   /**

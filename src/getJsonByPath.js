@@ -15,7 +15,7 @@ const { getFileExtension } = require("./utils");
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, srcPath}
+ * @returns {Object} results[].pkgInfo - {ext, path}
  */
 function getJsonByPath(...defaultPaths) {
   let ext = [];
@@ -43,14 +43,12 @@ function getJsonByPath(...defaultPaths) {
 
       const pkgExt = ext[i] || getFileExtension(resolve(pkgPath, "src"));
 
-      const srcPath = resolve(pkgPath, "src", `index.${pkgExt}`);
-
       /**
        * Add extracted extra info to pkgInfo and keep pkgJson as it is.
        */
       pkgInfo[name] = {
         ext: pkgExt,
-        srcPath
+        path: pkgPath
       };
 
       return {
