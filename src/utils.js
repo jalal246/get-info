@@ -9,17 +9,15 @@ const { resolve } = require("path");
  * @param {string} dir - given directory
  * @returns {string} extension.
  */
-function getFileExtension(dir) {
+function getFileExtension(dir, entry) {
   const files = fs.readdirSync(dir);
 
   const indx = files.find(file => {
-    return file.includes("index");
+    return file.includes(entry);
   });
 
   if (!indx) {
-    console.error(
-      `getFileExtension: Unable to detect extension. Can't find src/index`
-    );
+    console.error(`getFileExtension: Unable to detect extension In: ${dir}`);
   }
   const extension = indx.split(".").pop();
 
@@ -37,25 +35,33 @@ function getFileExtension(dir) {
  * @returns {boolean} result.isValid
  * @returns {string} result.ext
  */
-function validateAccess(dir = ".", ext, srcName = "src") {
+function validateAccess(
+  dir = ".",
+  { isValidateEntry = false, entry = "index", srcName = "src" } = {}
+) {
   const pkgJson = resolve(dir, "package.json");
-  const src = resolve(dir, srcName);
 
-  let fileExt;
+  const isSrc = fs.existsSync(resolve(dir, srcName));
+
+  const src = isSrc ? resolve(dir, srcName) : dir;
+
+  let ext;
 
   let isValid = true;
 
   try {
     fs.accessSync(pkgJson, fs.constants.R_OK);
 
-    fileExt = ext || getFileExtension(src);
-    const fullSrc = resolve(src, `index.${fileExt}`);
-    fs.accessSync(fullSrc, fs.constants.R_OK);
+    if (isValidateEntry) {
+      ext = getFileExtension(src, entry);
+      const fullSrc = resolve(src, `${entry}.${ext}`);
+      fs.accessSync(fullSrc, fs.constants.R_OK);
+    }
   } catch (err) {
     isValid = false;
   }
 
-  return { isValid, ext: fileExt };
+  return { isValid, ext, isSrc };
 }
 
 /**
@@ -67,11 +73,11 @@ function validateAccess(dir = ".", ext, srcName = "src") {
  * @returns {Array} results[].path filtered valid paths
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-function filterPathAccess(pkgPath = []) {
+function filterPathAccess(pkgPath = [], opts) {
   const filteredExt = [];
 
   const filteredPath = pkgPath.filter(_pkgPath => {
-    const { isValid, ext } = validateAccess(_pkgPath);
+    const { isValid, ext } = validateAccess(_pkgPath, opts);
 
     if (isValid) {
       filteredExt.push(ext);

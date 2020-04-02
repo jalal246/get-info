@@ -14,9 +14,14 @@ const { validateAccess, filterPathAccess } = require("./utils");
  * @returns {Array} results[].path valid path directory
  * @returns {Array} results[].ext extension for each path (js|ts)
  */
-function getPackagesPath(dir = "./packages/*") {
+function getPackagesPath(
+  dir = "./packages/*",
+  { isValidateEntry = false } = {}
+) {
   let path = [];
   let ext = [];
+
+  console.log("isValidateEntry", isValidateEntry);
 
   path = glob.sync(dir);
 
@@ -24,7 +29,7 @@ function getPackagesPath(dir = "./packages/*") {
    * If length is zero, not monorepo.
    */
   if (path.length === 0) {
-    const { isValid, ext: fileExt } = validateAccess(".");
+    const { isValid, ext: fileExt } = validateAccess(".", { isValidateEntry });
 
     if (isValid) {
       path.push(".");
@@ -35,7 +40,7 @@ function getPackagesPath(dir = "./packages/*") {
       );
     }
   } else {
-    ({ path, ext } = filterPathAccess(path));
+    ({ path, ext } = filterPathAccess(path, { isValidateEntry }));
   }
 
   // success(`> Found ${path.length} packages `);

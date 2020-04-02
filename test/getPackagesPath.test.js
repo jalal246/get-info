@@ -2,16 +2,20 @@ const { expect } = require("chai");
 
 const { getPackagesPath } = require("../src");
 
-describe("getPackagesPath", () => {
+describe.only("getPackagesPath", () => {
   it("Default: gets root path", () => {
-    const { path, ext } = getPackagesPath();
+    const { path, ext } = getPackagesPath(undefined, {
+      isValidateEntry: true
+    });
 
     expect(path).to.deep.equal(["."]);
     expect(ext).to.deep.equal(["js"]);
   });
 
   it("returns array contains path for all-valid packages", () => {
-    const { path, ext } = getPackagesPath("./test/packages-valid/*");
+    const { path, ext } = getPackagesPath("./test/packages-valid/*", {
+      isValidateEntry: true
+    });
 
     const expectedPaths = [
       "./test/packages-valid/folo-forms",
@@ -26,8 +30,10 @@ describe("getPackagesPath", () => {
     expect(ext).to.deep.equal(expectedExtensions);
   });
 
-  it("returns filtered array contains only valid packages", () => {
-    const { path, ext } = getPackagesPath("./test/packages-invalid/*");
+  it.only("returns filtered array contains only valid packages", () => {
+    const { path, ext } = getPackagesPath("./test/packages-invalid/*", {
+      isValidateEntry: true
+    });
 
     const expectedExtensions = ["js"];
 
@@ -35,5 +41,17 @@ describe("getPackagesPath", () => {
 
     expect(path).to.deep.equal(expected);
     expect(ext).to.deep.equal(expectedExtensions);
+  });
+
+  it("returns unfiltered array when isValidateEntry is false", () => {
+    const { path } = getPackagesPath("./test/packages-invalid/*");
+
+    const expected = [
+      "./test/packages-invalid/folo-forms",
+
+      "./test/packages-invalid/folo-layout"
+    ];
+
+    expect(path).to.deep.equal(expected);
   });
 });
