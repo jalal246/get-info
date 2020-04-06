@@ -1,12 +1,8 @@
 # get-info
 
-> Utility functions extract project(s) information. Make production easier & faster :mag_right:
+> Utility functions extract project(s) Json by providing project root path || package names.
 
-`get-info` Contains functions that read packages, validate
-readability, return path, JSON, and used extension(js|ts) for each package found in workspace.
-
-These functions are essential to deal with monorepos `./packages/**/src`, and it works as well for a
-single package project `./src`.
+`get-info` Works with monorepos `./packages/**/` as well for a single package project `./MyFiles`.
 
 ```bash
 npm install get-info
@@ -16,18 +12,17 @@ npm install get-info
 
 ### getJsonByName
 
-Extracts package json, extension, and resolved path for each project name. If
-`names` are not passed, it returns all json objects can be found in
+Extracts package json, and resolved path for each project name. If `names` are
+not passed, it returns all json objects can be found in
 `./packages/**/package.json` or `./package json`
 
 ```js
 /**
- *
  * @param {string} names required packages name
  *
  * @returns {Object} results
- * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, path}
+ * @returns {Array} results[].json - packages json related to given name
+ * @returns {Object} results[].pkgInfo - {path}
  */
 const { json, pkgInfo } = getJsonByName(...names);
 ```
@@ -39,24 +34,38 @@ import { getJsonByName } from "get-info";
 
 const { json, pkgInfo } = getJsonByName("myFav/project", "another/project");
 
-json
-//[{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {...}]
+// json
+//[{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {name: @another/project,}]
 
-pkgInfo[@myFav/project]
-// {ext: js, path: "./myFav-project"}
+// pkgInfo[@myFav/project]
+// {path: "root/to/myFav-project"}
 
-const { ext, path } = pkgInfo["@myFav/project"]
+// Note: to get default entry and resolved dist path:
 
-// to get default entry and resolved dist path:
-const srcPath = resolve(path, "src", `index.${ext}`);
+const { path } = pkgInfo["@myFav/project"];
+
+const srcPath = resolve(path, "src", `index.js`);
 const buildPath = resolve(path, "dist");
+```
+
+What if passed invalid name? It returns empty array.
+
+#### Example(2)
+
+```js
+const { json, pkgInfo } = getJsonByName("pkg-no-valid-json");
+
+// json
+// []
+
+if (json.length === 0) console.log("do something");
 ```
 
 ### getJsonByPath
 
-Extracts package json, extension, and resolved path for each given path. If
-`paths` are not passed, it returns all json objects can be found in
-`./packages/**/package.json` or `./package.json`
+Extracts package json, and its associated resolved path. If `paths` are not
+passed, it returns all json objects can be found in `./packages/**/package.json`
+or `./package.json`
 
 ```js
 /**
@@ -65,121 +74,55 @@ Extracts package json, extension, and resolved path for each given path. If
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, path}
+ * @returns {Object} results[].pkgInfo - {path}
  */
 const { json, pkgInfo } = getJsonByPath(...paths);
-```
-
-#### Example(2)
-
-```js
-import { getJsonByPath } from "get-info";
-
-const { json, pkgInfo } = getJsonByPath("./myProject");
-
-json
-// [{name: myProject, version: "1.1.1", main: "index.js", ...}]
-
-pkgInfo[myProject]
-//  {ext: ts, path: "./myProject"}
-```
-
-### getPackagesPath
-
-Scans root directory (workspace), returns all project in there. It filters each path returns
-only packages contain valid `src/index[ext]` and have `package.json`
-
-```js
-/**
- *
- * @param {string} [dir="./packages/*"]
- *
- * @returns {Object[]} results
- * @returns {Array} results[].path valid path directory
- * @returns {Array} results[].ext extension for each path (js|ts)
- */
-const { path, ext } = getPackagesPath(dir);
 ```
 
 #### Example(3)
 
 ```js
-import { getPackagesPath } from "get-info";
+import { getJsonByPath } from "get-info";
 
-const { path, ext } = getPackagesPath();
+const { json, pkgInfo } = getJsonByPath(`${__dirname}/myProject`);
 
-// path [
-//   "./packages/myProj1",
-//   "./packages/myProj2",
-//   "./packages/myProj3"
-// ];
+// json
+// [{name: myProject, version: "1.1.1", main: "index.js", ...}]
 
-// ext ["js", "ts", "ts"];
+// pkgInfo[myProject]
+// {path: "root/to/myProject"}
 ```
 
-### Utils: functions used in this project exported for further use
+How it works with monorepo
 
-#### utils.getFileExtension
-
-Gets extension used for `project/**/src/**`
+#### Example(4)
 
 ```js
-import { utils } from "get-info";
+const { json, pkgInfo } = getJsonByPath(
+  `${__dirname}/myProject1`,
+  `${__dirname}/myProject2`
+);
 
-/**
- *
- * @param {string} dir - given directory
- * @returns {string} extension.
- */
-const { getFileExtension } = utils;
-const extension = getFileExtension(dir);
-```
+// json
+// [{name: myProject1, version: "1.1.1", main: "index.js", ...}]
 
-#### utils.validateAccess
+// Since path is exported and associated with  package name you can easily do:
 
-Validates access readability for `package.json` & `src`.
+const { path } = pkgInfo["myProject1"];
 
-```js
-import { utils } from "get-info";
-const { validateAccess } = utils;
-
-/**
- *
- * @param {string} [dir="."]
- * @param {string} [ext=getFileExtension(dir/src)]
- * @param {string} [srcName="src"]
- *
- * @returns {Object} result
- * @returns {boolean} result.isValid
- * @returns {string} result.ext
- */
-const { isValid, ext } = validateAccess(dir, ext, srcName);
-```
-
-#### utils.filterPathAccess
-
-Filters array of paths by validate each path. Make sure it has `package.json` & `src`.
-
-```js
-import { utils } from "get-info";
-const { filterPathAccess } = utils;
-
-/**
- *
- * @param {Array} [pkgPath=[]]
- * @returns {Object} results[]
- * @returns {Array} results[].path filtered valid paths
- * @returns {Array} results[].ext extension for each path (js|ts)
- */
-const { path, ext } = filterPathAccess(pkgPath);
+const srcPath = resolve(path, "src", `index.js`);
+const buildPath = resolve(path, "dist");
 ```
 
 ### Related projects
 
-- [packageSorter](https://github.com/jalal246/packageSorter) - Sorting packages
-  for monorepos production.
+- [validate-access](https://github.com/jalal246/validate-access) - Validate
+  project accessibility files
 
-- [builderz](https://github.com/jalal246/builderz) - Build your project(s) with zero configuration
+- [packageSorter](https://github.com/jalal246/packageSorter) - Sorts a group of
+  packages that depends on each other.
+
+- [builderz](https://github.com/jalal246/builderz) - JavaScript Bundler with zero configuration.
 
 - [corename](https://github.com/jalal246/corename) - Extracts package name.
 
