@@ -1,8 +1,8 @@
 # get-info
 
-> Utility functions extract project(s) Json by providing project root path || package names.
+> Utility functions extract project(s) Json by providing> project root path or package names.
 
-`get-info` Works with monorepos `./packages/**/` as well for a single package project `./MyFiles`.
+`get-info` Works with monorepos `./packages/**/` as well as for a single package project `./MyFiles`.
 
 ```bash
 npm install get-info
@@ -48,7 +48,7 @@ const srcPath = resolve(path, "src", `index.js`);
 const buildPath = resolve(path, "dist");
 ```
 
-What if passed invalid name? It returns empty array.
+What if passed invalid name? It returns empty array `[]`
 
 #### Example(2)
 
@@ -93,7 +93,7 @@ const { json, pkgInfo } = getJsonByPath(`${__dirname}/myProject`);
 // {path: "root/to/myProject"}
 ```
 
-How it works with monorepo
+How it works with monorepo?
 
 #### Example(4)
 

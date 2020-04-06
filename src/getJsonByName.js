@@ -1,4 +1,7 @@
 /* eslint-disable func-names */
+
+"use_strict";
+
 const getJsonByPath = require("./getJsonByPath");
 
 /**

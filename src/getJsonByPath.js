@@ -1,4 +1,7 @@
 /* eslint-disable no-console */
+
+"use_strict";
+
 const { resolve } = require("path");
 const fs = require("fs");
 

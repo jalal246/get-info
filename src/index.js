@@ -1,3 +1,5 @@
+"use_strict";
+
 const getJsonByPath = require("./getJsonByPath");
 const getJsonByName = require("./getJsonByName");
 
