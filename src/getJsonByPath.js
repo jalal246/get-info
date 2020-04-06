@@ -1,73 +1,77 @@
 /* eslint-disable no-console */
-/* eslint-disable func-names */
+
+"use_strict";
+
 const { resolve } = require("path");
 const fs = require("fs");
 
-const getPackagesPath = require("./getPackagesPath");
+function discoverProjectRoot() {
+  const isValid = fs.existsSync("./packages");
+  const rootPath = [];
 
-const { getFileExtension } = require("./utils");
+  if (isValid) {
+    rootPath.push(fs.readdirSync("./packages"));
+  } else {
+    rootPath.push(".");
+  }
+
+  return rootPath;
+}
 
 /**
- * Extracts package json, extension, and resolved source path for each given
+ * Extracts package json and resolved source path for each given
  * path.
  *
  * @param {sting} defaultPaths  contains paths to resolve and extracts info form.
  *
  * @returns {Object} results
  * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {ext, path}
+ * @returns {Object} results[].pkgInfo - { path }
  */
 function getJsonByPath(...defaultPaths) {
-  let ext = [];
   let foundPaths;
 
   if (defaultPaths.length === 0) {
-    // msg(`Getting all paths`);
-
-    ({ path: foundPaths, ext } = getPackagesPath());
+    foundPaths = discoverProjectRoot();
   } else {
     foundPaths = defaultPaths;
   }
 
   const pkgInfo = {};
 
-  const packagesJson = foundPaths.map((pkgPath, i) => {
-    const pkgJson = resolve(pkgPath, "package.json");
+  const packagesJson = foundPaths
+    .map((pkgPath) => {
+      const pkgJson = resolve(pkgPath, "package.json");
 
-    try {
+      const isValid = fs.existsSync(pkgJson);
+
+      if (!isValid) {
+        return null;
+      }
+
       const json = fs.readFileSync(pkgJson, "utf8");
 
       const { name, peerDependencies, dependencies, ...other } = JSON.parse(
         json
       );
 
-      const pkgExt = ext[i] || getFileExtension(resolve(pkgPath, "src"));
-
       /**
        * Add extracted extra info to pkgInfo and keep pkgJson as it is.
        */
       pkgInfo[name] = {
-        ext: pkgExt,
-        path: pkgPath
+        path: pkgPath,
       };
 
       return {
         name,
         peerDependencies,
         dependencies,
-        ...other
+        ...other,
       };
-    } catch (e) {
-      console.error(`${e}`);
-      return false;
-    }
-  });
+    })
+    .filter(Boolean);
 
-  const filteredPkgJson = packagesJson.filter(Boolean);
-
-  // success(`> Done extracting ${filteredPkgJson.length} packages json`);
-
-  return { json: filteredPkgJson, pkgInfo };
+  return { json: packagesJson, pkgInfo };
 }
 
 module.exports = getJsonByPath;

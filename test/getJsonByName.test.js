@@ -1,8 +1,9 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { expect } = require("chai");
 const { getJsonByName } = require("../src");
 
 describe("getJsonByName", () => {
-  it("Default: gets current path with ext and json", () => {
+  it("Default: gets current path and json", () => {
     const { json, pkgInfo } = getJsonByName();
 
     expect(json).to.be.an("Array");
@@ -20,10 +21,9 @@ describe("getJsonByName", () => {
     expect(name).to.be.equal("get-info");
     expect(dependencies).to.be.an("Object");
 
-    const { path, ext } = pkgInfo[name];
+    const { path } = pkgInfo[name];
 
     expect(path).to.be.an("string");
-    expect(ext).to.be.equal("js");
   });
 
   it("gets array of json with default path", () => {
@@ -38,7 +38,7 @@ describe("getJsonByName", () => {
   // it("gets array of json with a given path", () => {
   //   const { path } = getPackagesPath("./test/packages-valid/*");
 
-  //   const { json } = getJsonByName("dist", ...path)();
+  //   const { json } = getJsonByName(...path);
 
   //   expect(json).to.be.an("Array");
   //   expect(json.length).to.be.equal(5);

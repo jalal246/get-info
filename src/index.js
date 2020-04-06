@@ -1,13 +1,9 @@
-const getJsonByPath = require("./getJsonByPath");
-const getPackagesPath = require("./getPackagesPath");
-const getJsonByName = require("./getJsonByName");
+"use_strict";
 
-const utils = require("./utils");
+const getJsonByPath = require("./getJsonByPath");
+const getJsonByName = require("./getJsonByName");
 
 module.exports = {
   getJsonByName,
-  getPackagesPath,
   getJsonByPath,
-
-  utils
 };

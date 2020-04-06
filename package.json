@@ -10,12 +10,12 @@
   },
   "files": [
     "src",
-    "dist",
     "README.md"
   ],
   "keywords": [
     "builderz",
     "get-info",
+    "validate-access",
     "package-sorter",
     "corename",
     "mytools",

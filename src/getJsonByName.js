@@ -1,4 +1,7 @@
 /* eslint-disable func-names */
+
+"use_strict";
+
 const getJsonByPath = require("./getJsonByPath");
 
 /**
@@ -22,18 +25,18 @@ function getJsonByName(...names) {
 
     return {
       json,
-      pkgInfo
+      pkgInfo,
     };
   }
 
   const filteredJson = [];
   const filteredPkgInfo = {};
 
-  names.forEach(packageName => {
+  names.forEach((pkgName) => {
     for (let j = 0; j < json.length; j += 1) {
       const { name } = json[j];
 
-      if (name.includes(packageName)) {
+      if (name.includes(pkgName)) {
         filteredJson.push(json[j]);
 
         /**
@@ -53,7 +56,7 @@ function getJsonByName(...names) {
 
   return {
     json: filteredJson,
-    pkgInfo: filteredPkgInfo
+    pkgInfo: filteredPkgInfo,
   };
 }
 
