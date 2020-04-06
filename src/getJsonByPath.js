@@ -4,12 +4,15 @@ const fs = require("fs");
 
 function discoverProjectRoot() {
   const isValid = fs.existsSync("./packages");
+  const rootPath = [];
 
   if (isValid) {
-    return fs.readdirSync("./packages");
+    rootPath.push(fs.readdirSync("./packages"));
+  } else {
+    rootPath.push(".");
   }
 
-  return fs.readdirSync("./");
+  return rootPath;
 }
 
 /**
@@ -33,10 +36,16 @@ function getJsonByPath(...defaultPaths) {
 
   const pkgInfo = {};
 
-  const packagesJson = foundPaths.map((pkgPath) => {
-    const pkgJson = resolve(pkgPath, "package.json");
+  const packagesJson = foundPaths
+    .map((pkgPath) => {
+      const pkgJson = resolve(pkgPath, "package.json");
 
-    try {
+      const isValid = fs.existsSync(pkgJson);
+
+      if (!isValid) {
+        return null;
+      }
+
       const json = fs.readFileSync(pkgJson, "utf8");
 
       const { name, peerDependencies, dependencies, ...other } = JSON.parse(
@@ -56,15 +65,10 @@ function getJsonByPath(...defaultPaths) {
         dependencies,
         ...other,
       };
-    } catch (err) {
-      console.error(`${err}`);
-      return false;
-    }
-  });
+    })
+    .filter(Boolean);
 
-  const filteredPkgJson = packagesJson.filter(Boolean);
-
-  return { json: filteredPkgJson, pkgInfo };
+  return { json: packagesJson, pkgInfo };
 }
 
 module.exports = getJsonByPath;
