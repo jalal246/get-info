@@ -4,12 +4,13 @@ const { getJsonByName } = require("../src");
 
 describe("getJsonByName", () => {
   it("Default: gets current path and json", () => {
-    const { json, pkgInfo } = getJsonByName();
+    const { json, pkgInfo, unfoundJson } = getJsonByName();
 
     expect(json).to.be.an("Array");
     expect(pkgInfo).to.be.an("Object");
 
     expect(json.length).to.be.equal(1);
+    expect(unfoundJson.length).to.be.equal(0);
 
     expect(json[0]).to.have.own.property("dependencies");
 
@@ -27,10 +28,11 @@ describe("getJsonByName", () => {
   });
 
   it("gets array of json with default path", () => {
-    const { json } = getJsonByName("get-info");
+    const { json, unfoundJson } = getJsonByName("get-info");
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(1);
+    expect(unfoundJson.length).to.be.equal(0);
 
     expect(json[0].name).to.be.equal("get-info");
   });
@@ -61,9 +63,10 @@ describe("getJsonByName", () => {
   // });
 
   it("returns empty array when name is wrong", () => {
-    const { json } = getJsonByName("nothingTrue");
+    const { json, unfoundJson } = getJsonByName("nothingTrue");
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(0);
+    expect(unfoundJson.length).to.be.equal(0);
   });
 });
