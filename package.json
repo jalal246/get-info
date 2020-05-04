@@ -39,9 +39,7 @@
     "fileSystem",
     "filter"
   ],
-  "dependencies": {
-    "glob": "^7.1.6"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
