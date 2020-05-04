@@ -38,6 +38,7 @@ function getJsonByPath(...defaultPaths) {
   }
 
   const pkgInfo = {};
+  const unfoundJson = [];
 
   const packagesJson = foundPaths
     .map((pkgPath) => {
@@ -46,6 +47,7 @@ function getJsonByPath(...defaultPaths) {
       const isValid = fs.existsSync(pkgJson);
 
       if (!isValid) {
+        unfoundJson.push(pkgJson);
         return null;
       }
 
@@ -71,7 +73,7 @@ function getJsonByPath(...defaultPaths) {
     })
     .filter(Boolean);
 
-  return { json: packagesJson, pkgInfo };
+  return { json: packagesJson, pkgInfo, unfoundJson };
 }
 
 module.exports = getJsonByPath;
