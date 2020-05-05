@@ -59,7 +59,7 @@ function getJsonByName(...names) {
   return {
     json: filteredJson,
     pkgInfo: filteredPkgInfo,
-   /** unfoundJson*/ ,
+    /** unfoundJson */
   };
 }
 

@@ -2,7 +2,7 @@
 
 > Utility functions extract project(s) Json by providing> project root path or package names.
 
-`get-info` Works with monorepos `./packages/**/` as well as for a single package project `./MyFiles`.
+`get-info` Works with monorepos `./packages/**/` as well as for a single package project `./myFiles`.
 
 ```bash
 npm install get-info
@@ -97,7 +97,7 @@ The result object:
 
 - `json: Array <packJson>` - Contains objects of all retrieved package.json based on given paths
 - `pkgInfo: Array <packPath>` - Contains objects of package paths based on package path
-- `unfoundJson: Array` - List of package paths don't have valid package.json
+- `unfoundJson: Array <string>` - List of paths don't have valid package.json
 
 ```js
 const { json, pkgInfo, unfoundJson } = getJsonByPath(...paths);
@@ -124,6 +124,37 @@ const { json, pkgInfo, unfoundJson } = getJsonByPath(
   `${__dirname}/foo`,
   `${__dirname}/bar`
 );
+
+// json = [
+//   { name: "foo", version: "1.0.0", main: "index.js" },
+//   { name: "bar", version: "2.1.1", main: "bundle.js" },
+// ];
+
+// pkgInfo = {
+//   foo: { path: "path/to/foo" },
+//   bar: { path: "path/to/bar" },
+// };
+
+// unfoundJson = ["path/to/foobar"];
+```
+
+By default, `getJsonByPath` returns all package in `workspace` tree.
+
+```js
+// workspace
+// │
+// ├───foo
+// │   ├───src
+// │   └───package.json
+// ├───bar
+// │   ├───src
+// │   └───package.json
+// ├───foobar
+// │   └───src
+// │
+// │───package.json
+
+const { json, pkgInfo, unfoundJson } = getJsonByPath();
 
 // json = [
 //   { name: "foo", version: "1.0.0", main: "index.js" },
