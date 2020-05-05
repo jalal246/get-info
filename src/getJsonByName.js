@@ -18,14 +18,16 @@ function getJsonByName(...names) {
   /**
    * extract all then filters it.
    */
-  const { json, pkgInfo } = getJsonByPath();
+  const { json, pkgInfo /** unfoundJson * */ } = getJsonByPath();
 
   if (names.length === 0) {
-    // msg(`Getting all packages`);
-
+    /**
+     * returns all.
+     */
     return {
       json,
       pkgInfo,
+      /** unfoundJson, * */
     };
   }
 
@@ -57,6 +59,7 @@ function getJsonByName(...names) {
   return {
     json: filteredJson,
     pkgInfo: filteredPkgInfo,
+    /** unfoundJson */
   };
 }
 

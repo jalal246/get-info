@@ -13,10 +13,11 @@ const rootPath = fs
 
 describe("getJsonByPath", () => {
   it("Default: Checks if monorepo or not and gets the json info", () => {
-    const { json, pkgInfo } = getJsonByPath();
+    const { json, pkgInfo, unfoundJson } = getJsonByPath();
 
     expect(json).to.be.an("Array");
     expect(json.length).to.be.equal(1);
+    expect(unfoundJson.length).to.be.equal(0);
 
     expect(json[0]).to.have.own.property("name");
     expect(json[0]).to.have.own.property("files");
@@ -32,9 +33,10 @@ describe("getJsonByPath", () => {
   });
 
   it("returns all valid packages contains json for given path", () => {
-    const { json, pkgInfo } = getJsonByPath(...rootPath);
+    const { json, pkgInfo, unfoundJson } = getJsonByPath(...rootPath);
 
     expect(json.length).to.be.equal(6);
+    expect(unfoundJson.length).to.be.equal(1);
 
     json.forEach(({ name }) => {
       expect(name).to.be.an("string");
