@@ -17,13 +17,15 @@ not passed, it returns all json objects can be found in
 `./packages/**/package.json` or `./package json`
 
 ```js
-/**
- * @param {string} names required packages name
- *
- * @returns {Object} results
- * @returns {Array} results[].json - packages json related to given name
- * @returns {Object} results[].pkgInfo - {path}
- */
+getJsonByName(...packNames?string)
+```
+
+The result object:
+
+- `json: Array <packJson>` - Contains objects of all retrieved package.json based on given names
+- `pkgInfo: Array <packPath>` - Contains objects of package paths based on package name
+
+```js
 const { json, pkgInfo } = getJsonByName(...names);
 ```
 
@@ -32,20 +34,29 @@ const { json, pkgInfo } = getJsonByName(...names);
 ```js
 import { getJsonByName } from "get-info";
 
-const { json, pkgInfo } = getJsonByName("myFav/project", "another/project");
+// workspace
+// │
+// ├───foo
+// │   ├───src
+// │   └───package.json
+// ├───bar
+// │   ├───src
+// │   └───package.json
+// ├───foobar
+// │   ├───src
+// │
 
-// json
-//[{name: @myFav/project, version: "1.1.1", main: "index.js", ...}, {name: @another/project,}]
+const { json, pkgInfo } = getJsonByName("foo", "bar");
 
-// pkgInfo[@myFav/project]
-// {path: "root/to/myFav-project"}
+// json = [
+//   { name: "foo", version: "1.0.0", main: "index.js" },
+//   { name: "bar", version: "2.1.1", main: "bundle.js" },
+// ];
 
-// Note: to get default entry and resolved dist path:
-
-const { path } = pkgInfo["@myFav/project"];
-
-const srcPath = resolve(path, "src", `index.js`);
-const buildPath = resolve(path, "dist");
+// pkgInfo = {
+//   foo: { path: "path/to/foo" },
+//   bar: { path: "path/to/bar" },
+// };
 ```
 
 What if passed invalid name? It returns empty array `[]`
@@ -53,10 +64,21 @@ What if passed invalid name? It returns empty array `[]`
 #### Example(2)
 
 ```js
-const { json, pkgInfo } = getJsonByName("pkg-no-valid-json");
+// workspace
+// │
+// ├───foo
+// │   ├───src
+// │   └───package.json
+// ├───bar
+// │   ├───src
+// │   └───package.json
+// ├───foobar
+// │   ├───src
+// │
 
-// json
-// []
+const { json, pkgInfo } = getJsonByName("baz");
+
+// json =[]
 
 if (json.length === 0) console.log("do something");
 ```
@@ -68,15 +90,17 @@ passed, it returns all json objects can be found in `./packages/**/package.json`
 or `./package.json`
 
 ```js
-/**
- *
- * @param {sting} paths  contains paths to resolve and extracts info form.
- *
- * @returns {Object} results
- * @returns {Array} results[].json - packages json related to given path
- * @returns {Object} results[].pkgInfo - {path}
- */
-const { json, pkgInfo } = getJsonByPath(...paths);
+getJsonByPath(...paths?string)
+```
+
+The result object:
+
+- `json: Array <packJson>` - Contains objects of all retrieved package.json based on given paths
+- `pkgInfo: Array <packPath>` - Contains objects of package paths based on package path
+- `unfoundJson: Array` - List of package paths don't have valid package.json
+
+```js
+const { json, pkgInfo, unfoundJson } = getJsonByPath(...paths);
 ```
 
 #### Example(3)
@@ -84,35 +108,45 @@ const { json, pkgInfo } = getJsonByPath(...paths);
 ```js
 import { getJsonByPath } from "get-info";
 
-const { json, pkgInfo } = getJsonByPath(`${__dirname}/myProject`);
+// workspace
+// │
+// ├───foo
+// │   ├───src
+// │   └───package.json
+// ├───bar
+// │   ├───src
+// │   └───package.json
+// ├───foobar
+// │   ├───src
+// │
 
-// json
-// [{name: myProject, version: "1.1.1", main: "index.js", ...}]
-
-// pkgInfo[myProject]
-// {path: "root/to/myProject"}
-```
-
-How it works with monorepo?
-
-#### Example(4)
-
-```js
-const { json, pkgInfo } = getJsonByPath(
-  `${__dirname}/myProject1`,
-  `${__dirname}/myProject2`
+const { json, pkgInfo, unfoundJson } = getJsonByPath(
+  `${__dirname}/foo`,
+  `${__dirname}/bar`
 );
 
-// json
-// [{name: myProject1, version: "1.1.1", main: "index.js", ...}]
+// json = [
+//   { name: "foo", version: "1.0.0", main: "index.js" },
+//   { name: "bar", version: "2.1.1", main: "bundle.js" },
+// ];
 
-// Since path is exported and associated with  package name you can easily do:
+// pkgInfo = {
+//   foo: { path: "path/to/foo" },
+//   bar: { path: "path/to/bar" },
+// };
 
-const { path } = pkgInfo["myProject1"];
-
-const srcPath = resolve(path, "src", `index.js`);
-const buildPath = resolve(path, "dist");
+// unfoundJson = ["path/to/foobar"];
 ```
+
+## Tests
+
+```sh
+npm test
+```
+
+## License
+
+This project is licensed under the [GPL-3.0 License](https://github.com/jalal246/get-info/blob/master/LICENSE)
 
 ### Related projects
 
@@ -131,12 +165,5 @@ const buildPath = resolve(path, "dist");
 
 - [textics](https://github.com/jalal246/textics) & [textics-stream](https://github.com/jalal246/textics-stream) - Counts lines, words, chars and spaces for a given string.
 
-## Tests
-
-```sh
-npm test
-```
-
-## License
-
-This project is licensed under the [GPL-3.0 License](https://github.com/jalal246/get-info/blob/master/LICENSE)
+- [folo](https://github.com/jalal246/folo) - Form & Layout Components Built with
+  React.

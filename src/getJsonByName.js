@@ -18,7 +18,7 @@ function getJsonByName(...names) {
   /**
    * extract all then filters it.
    */
-  const { json, pkgInfo, unfoundJson } = getJsonByPath();
+  const { json, pkgInfo /** unfoundJson * */ } = getJsonByPath();
 
   if (names.length === 0) {
     /**
@@ -27,7 +27,7 @@ function getJsonByName(...names) {
     return {
       json,
       pkgInfo,
-      unfoundJson,
+      /** unfoundJson, * */
     };
   }
 
@@ -59,7 +59,7 @@ function getJsonByName(...names) {
   return {
     json: filteredJson,
     pkgInfo: filteredPkgInfo,
-    unfoundJson,
+   /** unfoundJson*/ ,
   };
 }
 
