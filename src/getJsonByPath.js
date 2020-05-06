@@ -70,21 +70,16 @@ function getJsonByPath(...defaultPaths) {
         return null;
       }
 
-      const { name, ...rest } = JSON.parse(json);
-
       /**
        * Add extracted extra info to pkgInfo and keep pkgJson as it is.
        */
-      pkgInfo[name || i] = {
+      pkgInfo[parsed.name || i] = {
         path: pkgPath,
       };
 
       i += 1;
 
-      return {
-        name,
-        ...rest,
-      };
+      return parsed;
     })
     .filter(Boolean);
 
