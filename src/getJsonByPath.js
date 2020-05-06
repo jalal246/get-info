@@ -49,7 +49,7 @@ function getJsonByPath(...defaultPaths) {
       const isValid = fs.existsSync(pkgJson);
 
       if (!isValid) {
-        unfoundJson.push(pkgJson);
+        unfoundJson.push(pkgPath);
 
         return null;
       }
@@ -57,7 +57,7 @@ function getJsonByPath(...defaultPaths) {
       const json = fs.readFileSync(pkgJson, "utf8");
 
       if (!json) {
-        unfoundJson.push(pkgJson);
+        unfoundJson.push(pkgPath);
 
         return null;
       }
@@ -65,7 +65,7 @@ function getJsonByPath(...defaultPaths) {
       const parsed = JSON.parse(json);
 
       if (parsed.constructor !== Object || Object.keys(parsed).length === 0) {
-        unfoundJson.push(pkgJson);
+        unfoundJson.push(pkgPath);
 
         return null;
       }
