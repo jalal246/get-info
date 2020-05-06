@@ -36,7 +36,7 @@ describe("getJsonByPath", () => {
     const { json, pkgInfo, unfoundJson } = getJsonByPath(...rootPath);
 
     expect(json.length).to.be.equal(6);
-    expect(unfoundJson.length).to.be.equal(1);
+    expect(unfoundJson.length).to.be.equal(4);
 
     json.forEach(({ name }) => {
       expect(name).to.be.an("string");

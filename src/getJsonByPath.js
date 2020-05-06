@@ -40,6 +40,8 @@ function getJsonByPath(...defaultPaths) {
   const pkgInfo = {};
   const unfoundJson = [];
 
+  let i = 0;
+
   const packagesJson = foundPaths
     .map((pkgPath) => {
       const pkgJson = resolve(pkgPath, "package.json");
@@ -48,27 +50,40 @@ function getJsonByPath(...defaultPaths) {
 
       if (!isValid) {
         unfoundJson.push(pkgJson);
+
         return null;
       }
 
       const json = fs.readFileSync(pkgJson, "utf8");
 
-      const { name, peerDependencies, dependencies, ...other } = JSON.parse(
-        json
-      );
+      if (!json) {
+        unfoundJson.push(pkgJson);
+
+        return null;
+      }
+
+      const parsed = JSON.parse(json);
+
+      if (parsed.constructor !== Object || Object.keys(parsed).length === 0) {
+        unfoundJson.push(pkgJson);
+
+        return null;
+      }
+
+      const { name, ...rest } = JSON.parse(json);
 
       /**
        * Add extracted extra info to pkgInfo and keep pkgJson as it is.
        */
-      pkgInfo[name] = {
+      pkgInfo[name || i] = {
         path: pkgPath,
       };
 
+      i += 1;
+
       return {
         name,
-        peerDependencies,
-        dependencies,
-        ...other,
+        ...rest,
       };
     })
     .filter(Boolean);
